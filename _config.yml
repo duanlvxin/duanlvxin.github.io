@@ -3,13 +3,14 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Duan's Blog
-subtitle: 'My Blog'
-description: '这是小段的blog'
-keywords: 'blog blog2'
+title: 小段的博客
+subtitle: '前端学习笔记'
+description: '这是小段的博客,收录前端学习笔记'
+keywords: '前端 笔记 博客'
 author: Duan lvxin
 language: zh-CN
 timezone: ''
+email: 2316636696@qq.com
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
