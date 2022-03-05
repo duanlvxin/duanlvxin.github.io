@@ -12,6 +12,13 @@ language: zh-CN
 timezone: ''
 email: 2316636696@qq.com
 
+# Search
+search:
+  path: search.xml
+  field: post
+  content: true
+  template: 
+
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
 url: https://duanlvxin.github.io
