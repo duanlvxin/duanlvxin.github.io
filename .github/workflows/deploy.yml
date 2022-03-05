@@ -1,0 +1,39 @@
+name: Hexo Deploy
+
+on:
+  push:
+    branches:
+      - dev
+    
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    if: github.event.repository.owner.id == github.event.sender.id
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+        with:
+          ref: dev
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16'
+
+      - name: Setup Hexo
+        run: |
+          npm install hexo-cli -g
+          npm install
+          
+      - name: Build
+        run: |
+          hexo clean
+          hexo generate
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
+        with:
+          branch: master
+          folder: public
+          ssh-key: ${{ secrets.HEXO_DEPLOY_KEY }}
