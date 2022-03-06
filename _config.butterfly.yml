@@ -85,13 +85,13 @@ index_img: https://i0.hippopx.com/photos/228/917/292/access-blur-business-comput
 # index_img: https://s.cn.bing.net/th?id=OHR.ZugspitzeGipfelstation_ZH-CN6120971585_1920x1080.jpg&rf=LaDigue_1920x1080.jpg
 
 # If the banner of page not setting, it will show the top_img
-default_top_img: https://i0.hippopx.com/photos/228/917/292/access-blur-business-computer-b75712145f16d25115485059d52a7ceb.jpg
+default_top_img: https://s.cn.bing.net/th?id=OHR.ZugspitzeGipfelstation_ZH-CN6120971585_1920x1080.jpg&rf=LaDigue_1920x1080.jpg
 # The banner image of archive page
-archive_img: https://s.cn.bing.net/th?id=OHR.BerchtesgadenerAlpen_ZH-CN0740088231_1920x1080.jpg&rf=LaDigue_1920x1080.jpg
+archive_img: https://s.cn.bing.net/th?id=OHR.ZugspitzeGipfelstation_ZH-CN6120971585_1920x1080.jpg&rf=LaDigue_1920x1080.jpg
 
 # If the banner of tag page not setting, it will show the top_img
 # note: tag page, not tags page (子標籤頁面的 top_img)
-tag_img: https://s.cn.bing.net/th?id=OHR.BerchtesgadenerAlpen_ZH-CN0740088231_1920x1080.jpg&rf=LaDigue_1920x1080.jpg
+tag_img: https://s.cn.bing.net/th?id=OHR.ZugspitzeGipfelstation_ZH-CN6120971585_1920x1080.jpg&rf=LaDigue_1920x1080.jpg
 
 # The banner image of tag page
 # format:
@@ -100,13 +100,13 @@ tag_per_img:
 
 # If the banner of category page not setting, it will show the top_img
 # note: category page, not categories page (子分類頁面的 top_img)
-category_img: https://s.cn.bing.net/th?id=OHR.BerchtesgadenerAlpen_ZH-CN0740088231_1920x1080.jpg&rf=LaDigue_1920x1080.jpg
+category_img: https://s.cn.bing.net/th?id=OHR.ZugspitzeGipfelstation_ZH-CN6120971585_1920x1080.jpg&rf=LaDigue_1920x1080.jpg
 
 # The banner image of category page
 # format:
 #  - category name: xxxxx
 category_per_img:
-  - Diary: https://s.cn.bing.net/th?id=OHR.NormandyMont_ZH-CN6657762215_1920x1080.jpg&rf=LaDigue_1920x1080.jpg
+  # - js: https://s.cn.bing.net/th?id=OHR.NormandyMont_ZH-CN6657762215_1920x1080.jpg&rf=LaDigue_1920x1080.jpg
 
 cover:
   # display the cover or not (是否顯示文章封面)
