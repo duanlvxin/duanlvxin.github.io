@@ -4,6 +4,60 @@
   
     
     <entry>
+      <title>html属性顺序校验和排序</title>
+      <link href="/2022/03/06/html%E5%B1%9E%E6%80%A7%E9%A1%BA%E5%BA%8F%E6%A0%A1%E9%AA%8C%E5%92%8C%E6%8E%92%E5%BA%8F/"/>
+      <url>/2022/03/06/html%E5%B1%9E%E6%80%A7%E9%A1%BA%E5%BA%8F%E6%A0%A1%E9%AA%8C%E5%92%8C%E6%8E%92%E5%BA%8F/</url>
+      
+        <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在使用vue编写.vue文件时，为了代码风格的统一，需要规范html标签中属性的顺序。<br>不同的团队对于顺序的定义不同，以我们的团队为例，约定好的顺序需要为:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v-xx=xx &gt; xx=xx &gt; :xx=xx  &gt; @xx=xx</span><br></pre></td></tr></table></figure><p>那么如果我们需要校验属性顺序是否符合这个规则，如果不符合进行排序使其符合要怎么做呢？</p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>对于判断是否符合规则：</p><ol><li>定义一个map对象存储属性与优先级的关系，codeMap</li><li>将属性数组中的属性根据这个codeMap映射出优先级数组。</li><li>问题就转换为判断这个数组是否是升序（或降序，根据codeMap中对于优先级的定义而定）</li></ol><p>对于排序：</p><ol><li>可以用js的sort函数，只需要实现传入的参数：compare函数</li><li>compare函数中的大小比较即是根据属性的优先级大小。</li></ol><h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>对于判断是否符合规则：</p><ol><li>定义codeMap,这里数字越小，优先级越高<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> codeMap = <span class="keyword">new</span> <span class="title class_">Map</span>([</span><br><span class="line">  [<span class="keyword">new</span> <span class="title class_">RegExp</span>(<span class="regexp">/^v-.+=.*$/</span>), <span class="number">1</span>],</span><br><span class="line">  [<span class="keyword">new</span> <span class="title class_">RegExp</span>(<span class="regexp">/^[^@:]+=.*$/</span>), <span class="number">2</span>],</span><br><span class="line">  [<span class="keyword">new</span> <span class="title class_">RegExp</span>(<span class="regexp">/^:.+=.*$/</span>), <span class="number">3</span>],</span><br><span class="line">  [<span class="keyword">new</span> <span class="title class_">RegExp</span>(<span class="regexp">/^@.+=.*$/</span>), <span class="number">4</span>]</span><br><span class="line">])</span><br></pre></td></tr></table></figure></li><li>生成优先级数组<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getWeight</span>(<span class="params">str</span>) &#123;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> [key, value] <span class="keyword">of</span> codeMap) &#123;</span><br><span class="line">    <span class="keyword">if</span>(key.<span class="title function_">test</span>(str)) &#123;</span><br><span class="line">      <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getWeightArr</span> (arr) &#123;</span><br><span class="line">  <span class="keyword">const</span> res = [];</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> item <span class="keyword">of</span> arr) &#123;</span><br><span class="line">    res.<span class="title function_">push</span>(<span class="title function_">getWeight</span>(item));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li>判断数组是否升序<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">isAscending</span> (arr) &#123;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> i=<span class="number">0</span>,len=arr.<span class="property">length</span>-<span class="number">1</span>;i&lt;len;i++)&#123;</span><br><span class="line">    <span class="keyword">if</span>(arr[i]&gt;arr[i+<span class="number">1</span>])&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ol><p>对于排序：</p><ol><li>只需实现compare函数<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">compare</span>(<span class="params">a, b</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> weightA = <span class="title function_">getWeight</span>(a);</span><br><span class="line">  <span class="keyword">const</span> weightB = <span class="title function_">getWeight</span>(b);</span><br><span class="line">  <span class="keyword">return</span> weightA - weightB;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ol><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>以下面这个数组为例:</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="string">&quot;:visible2=&#x27;visible2&#x27;&quot;</span>, <span class="string">&quot;style=&#x27;color: red&#x27;&quot;</span>, <span class="string">&quot;:visible=&#x27;visible&#x27;&quot;</span>, <span class="string">&quot;class = &#x27;test&quot;</span>, <span class="string">&quot;@click=&#x27;handleClick&#x27;&quot;</span>];</span><br></pre></td></tr></table></figure><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> weightArr = <span class="title function_">getWeightArr</span>(arr);</span><br><span class="line"><span class="keyword">const</span> sortedArr = arr.<span class="title function_">sort</span>(compare);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(sortedArr);</span><br><span class="line"><span class="keyword">const</span> sortedWeightArr = <span class="title function_">getWeightArr</span>(sortedArr);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">isAscending</span>(weightArr));</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">isAscending</span>(sortedWeightArr));</span><br></pre></td></tr></table></figure><p>打印结果：<br><img src="/../img/html%E5%B1%9E%E6%80%A7-%E7%BB%93%E6%9E%9C.png" alt="alt 结果" title="结果"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> js </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> html </tag>
+            
+            <tag> js </tag>
+            
+            <tag> 算法 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="/2022/03/06/hello-world/"/>
+      <url>/2022/03/06/hello-world/</url>
+      
+        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><p>test test2</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> hexo </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> hexo </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>根据选中状态过滤树</title>
       <link href="/2022/03/05/%E6%A0%B9%E6%8D%AE%E9%80%89%E4%B8%AD%E7%8A%B6%E6%80%81%E8%BF%87%E6%BB%A4%E6%A0%91/"/>
       <url>/2022/03/05/%E6%A0%B9%E6%8D%AE%E9%80%89%E4%B8%AD%E7%8A%B6%E6%80%81%E8%BF%87%E6%BB%A4%E6%A0%91/</url>
@@ -23,31 +77,6 @@
             <tag> js </tag>
             
             <tag> 算法 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Hello World</title>
-      <link href="/2022/03/05/hello-world/"/>
-      <url>/2022/03/05/hello-world/</url>
-      
-        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><p>test test2</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
-      
-      
-      <categories>
-          
-          <category> hexo </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> hexo </tag>
             
         </tags>
       
