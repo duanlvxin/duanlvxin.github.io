@@ -4,6 +4,56 @@
   
     
     <entry>
+      <title>拖拽内部嵌有iframe的元素，无法监听到鼠标事件问题解决</title>
+      <link href="/2022/03/12/%E6%8B%96%E6%8B%BD%E5%86%85%E9%83%A8%E5%B5%8C%E6%9C%89iframe%E7%9A%84%E5%85%83%E7%B4%A0%EF%BC%8C%E6%97%A0%E6%B3%95%E7%9B%91%E5%90%AC%E5%88%B0%E9%BC%A0%E6%A0%87%E4%BA%8B%E4%BB%B6%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/"/>
+      <url>/2022/03/12/%E6%8B%96%E6%8B%BD%E5%86%85%E9%83%A8%E5%B5%8C%E6%9C%89iframe%E7%9A%84%E5%85%83%E7%B4%A0%EF%BC%8C%E6%97%A0%E6%B3%95%E7%9B%91%E5%90%AC%E5%88%B0%E9%BC%A0%E6%A0%87%E4%BA%8B%E4%BB%B6%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/</url>
+      
+        <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>单纯的拖拽实现起来很简单，主要原理就是在鼠标按下时，监听鼠标的mousemove事件，根据鼠标移动的距离调整元素的坐标值；在鼠标松开时，取消mousemove的监听事件。但如果被拖拽的元素内存在iframe,在iframe内的鼠标事件无法被监听到，就会存在一些问题。</p><h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>在该被拖拽元素外层套一层,当鼠标按下时，在该层监听事件，当鼠标松开时，隐藏该外层。可以通过调整z-index的值来实现。</p><h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p><a href="https://codepen.io/duanlvxin/pen/jOajwGO">https://codepen.io/duanlvxin/pen/jOajwGO</a></p><p>比较：<br>(ps: codepen上演示有点问题，放到本地测试的)<br>不使用mask时，拖拽到最底部的时候，鼠标在iframe内松开，<strong>还能</strong>继续拖拽：<br><video src="/video/before.mp4" width="100%" height="100%" controls="controls"></video><br>使用mask时，拖拽到最底部的时候，鼠标在iframe内松开，<strong>不能</strong>继续拖拽：<br><video src="/video/after.mp4" width="100%" height="100%" controls="controls"></video></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> html </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> html 事件 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="/2022/03/12/hello-world/"/>
+      <url>/2022/03/12/hello-world/</url>
+      
+        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><p>test test2</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> hexo </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> hexo </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>html属性顺序校验和排序</title>
       <link href="/2022/03/06/html%E5%B1%9E%E6%80%A7%E9%A1%BA%E5%BA%8F%E6%A0%A1%E9%AA%8C%E5%92%8C%E6%8E%92%E5%BA%8F/"/>
       <url>/2022/03/06/html%E5%B1%9E%E6%80%A7%E9%A1%BA%E5%BA%8F%E6%A0%A1%E9%AA%8C%E5%92%8C%E6%8E%92%E5%BA%8F/</url>
@@ -25,31 +75,6 @@
             <tag> js </tag>
             
             <tag> 算法 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Hello World</title>
-      <link href="/2022/03/06/hello-world/"/>
-      <url>/2022/03/06/hello-world/</url>
-      
-        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><p>test test2</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
-      
-      
-      <categories>
-          
-          <category> hexo </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> hexo </tag>
             
         </tags>
       
