@@ -95,4 +95,4 @@ console.log(isAscending(sortedWeightArr));
 ```
 
 打印结果：
-![alt 结果](../img/html属性-结果.png "结果")
+![alt 结果](../img/html属性-结果.PNG "结果")
