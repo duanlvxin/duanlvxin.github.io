@@ -7,6 +7,7 @@ tags:
 categories:
   - css
 cover: /img/css-secret.jpg
+mathjax: true
 ---
 <style>
   .example {
