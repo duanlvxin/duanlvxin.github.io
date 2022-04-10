@@ -161,7 +161,7 @@ box-shadow: 0 0 0 0.35em black;
 </style>
 
 ### 水平条纹
-默认为水平条纹：
+默认为水平条纹(渐变轴为to right,180度)：
 <div class="css-box5"></div>
 ```css
 background-image: linear-gradient(red 50%, yellow 80%);
