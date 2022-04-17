@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>typescript概述</title>
+      <link href="/2022/04/10/typescript%E6%A6%82%E8%BF%B0/"/>
+      <url>/2022/04/10/typescript%E6%A6%82%E8%BF%B0/</url>
+      
+        <content type="html"><![CDATA[<h2 id="编译器"><a href="#编译器" class="headerlink" title="编译器"></a>编译器</h2><p>编译器做的三件事：</p><pre>1. 将代码转换为AST(抽象语法树)2. 将AST编译成字节码3. 运行时计算字节码</pre><p>TSC编译的过程：</p><pre>1. Typescript源码 -> Typescript AST2. 类型检查器检查AST3. Typescript AST -> javascript源码</pre><pre>4. javascript源码 -> javascript AST5. javascript AST -> 字节码6. 运行时计算字节码</pre><p>第1~3步由TSC操作，第4~6步由浏览器、NodeJs或其他Javascript引擎中的Javascript运行时操作。</p><p>编译型语言：<strong>运行前</strong>转换源码到字节码；解释型语言：<strong>运行时</strong>转换源码到字节码<br>Javascript编译器和运行时通常聚在一个称为引擎的程序中。程序员一般就是与引擎交互的。常见的引擎：V8、JSCore、Chakra。</p><h2 id="类型系统"><a href="#类型系统" class="headerlink" title="类型系统"></a>类型系统</h2><blockquote><p>类型系统：类型检查器为程序分配类型时使用的一系列规则</p></blockquote><blockquote><p>类型系统有两种：一种是显式的(java、c、c++等)，一种是自动推导的(javascript、python等)</p></blockquote><p>Typescript是两者的结合，既可以显示注解类型，也可以自动推导。</p><h2 id="Typescript和Javascript类型比较"><a href="#Typescript和Javascript类型比较" class="headerlink" title="Typescript和Javascript类型比较"></a>Typescript和Javascript类型比较</h2><table><thead><tr><th align="left">类型系统特性</th><th align="left">Typescript</th><th align="left">Javascript</th></tr></thead><tbody><tr><td align="left">类型是如何绑定的？</td><td align="left">静态</td><td align="left">动态</td></tr><tr><td align="left">是否自动转换类型？</td><td align="left">否（多数时候）</td><td align="left">是</td></tr><tr><td align="left">何时检查类型？</td><td align="left">编译时</td><td align="left">运行时</td></tr><tr><td align="left">何时报告错误？</td><td align="left">编译时（多数时候）</td><td align="left">运行时（多数时候）</td></tr></tbody></table><h2 id="代码编辑器设置"><a href="#代码编辑器设置" class="headerlink" title="代码编辑器设置"></a>代码编辑器设置</h2><p>如何从零创建一个typescript简单项目：</p><ol><li><p>下载依赖</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install typescript tslint @types/node</span><br></pre></td></tr></table></figure></li><li><p>配置ts: tsconfig.js</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx typescript --init</span><br></pre></td></tr></table></figure><p>详细的配置略，配置入口和出口：</p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;compilerOptions&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line">    ...<span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;outDir&quot;</span><span class="punctuation">:</span> <span class="string">&quot;dist&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;include&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;src&quot;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li><li><p>配置tslint: tslint.js</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx tslint --init</span><br></pre></td></tr></table></figure></li><li><p>新建src&#x2F;index.ts写入一些内容并编译执行</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">touch</span> src/index.ts</span><br><span class="line">npx tsc</span><br></pre></td></tr></table></figure><p>执行完成后可以看到生成了dist&#x2F;index.js文件，运行该文件</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node dist/index.js</span><br></pre></td></tr></table></figure></li></ol><p>利用工具创建typescript项目：</p><ol><li>ts-node: 只需一个命令便能编译和运行typescript代码</li><li>typescript-node-starter(<a href="https://github.com/Microsoft/TypeScript-Node-Starter">https://github.com/Microsoft/TypeScript-Node-Starter</a>): typescript-node脚手架</li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> typescript </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> typescript </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>css字体排印</title>
       <link href="/2022/04/10/css%E5%AD%97%E4%BD%93%E6%8E%92%E5%8D%B0/"/>
       <url>/2022/04/10/css%E5%AD%97%E4%BD%93%E6%8E%92%E5%8D%B0/</url>
