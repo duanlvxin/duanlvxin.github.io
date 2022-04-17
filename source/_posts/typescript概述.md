@@ -6,6 +6,7 @@ tags:
 categories:
  - typescript
 cover: /svg/typescript.svg
+bg_size: auto
 ---
 
 ## 编译器
