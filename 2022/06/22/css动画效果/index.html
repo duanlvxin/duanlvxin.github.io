@@ -1,0 +1,425 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>css视觉效果 | 小段的博客</title><meta name="keywords" content="css,css揭秘"><meta name="author" content="Duan lvxin,2316636696@qq.com"><meta name="copyright" content="Duan lvxin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="缓动动画小球下落效果         @keyframes bounce {     60%, 80%, 100% {       transform: translateY(80px);       animation-timing-function: cubic-bezier(.215, .61, .355, 1);     }     70% {       transform: trans">
+<meta property="og:type" content="article">
+<meta property="og:title" content="css视觉效果">
+<meta property="og:url" content="https://duanlvxin.github.io/2022/06/22/css%E5%8A%A8%E7%94%BB%E6%95%88%E6%9E%9C/index.html">
+<meta property="og:site_name" content="小段的博客">
+<meta property="og:description" content="缓动动画小球下落效果         @keyframes bounce {     60%, 80%, 100% {       transform: translateY(80px);       animation-timing-function: cubic-bezier(.215, .61, .355, 1);     }     70% {       transform: trans">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://duanlvxin.github.io/img/css-secret.jpg">
+<meta property="article:published_time" content="2022-06-22T22:10:09.000Z">
+<meta property="article:modified_time" content="2022-06-26T10:28:52.989Z">
+<meta property="article:author" content="Duan lvxin">
+<meta property="article:tag" content="css">
+<meta property="article:tag" content="css揭秘">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://duanlvxin.github.io/img/css-secret.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://duanlvxin.github.io/2022/06/22/css%E5%8A%A8%E7%94%BB%E6%95%88%E6%9E%9C/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: Duan lvxin","link":"链接: ","source":"来源: 小段的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'css视觉效果',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-06-26 10:28:52'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.0.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/css-secret.jpg'); background-size: cover"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">小段的博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">css视觉效果<a class="post-edit-link" href="https://github.com/duanlvxin/duanlvxin.github.io/edit/dev/source/_posts/css动画效果.md" title="编辑" target="_blank"><i class="fas fa-pencil-alt"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-06-22T22:10:09.000Z" title="发表于 2022-06-22 22:10:09">2022-06-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-06-26T10:28:52.989Z" title="更新于 2022-06-26 10:28:52">2022-06-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/css/">css</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">938</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="css视觉效果"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="缓动动画"><a href="#缓动动画" class="headerlink" title="缓动动画"></a>缓动动画</h2><h3 id="小球下落效果"><a href="#小球下落效果" class="headerlink" title="小球下落效果"></a>小球下落效果</h3><div class="example ball-wrap">
+  <div class="ball"></div>
+</div>
+
+<style>
+  @keyframes bounce {
+    60%, 80%, 100% {
+      transform: translateY(80px);
+      animation-timing-function: cubic-bezier(.215, .61, .355, 1);
+    }
+    70% {
+      transform: translateY(60px);
+    }
+    90% {
+      transform: translateY(70px);
+    }
+  }
+
+  .example {
+    margin-bottom: 20px;
+  }
+  .ball-wrap {
+    width: 50px;height:100px;
+    border: 1px solid black;
+  }
+  .ball {
+    width: 20px;height:20px;background:orange;border-radius:50%;margin: 0 auto;
+    animation: bounce 3s cubic-bezier(.755, .05, .855, .06) infinite;
+  }
+</style>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@keyframes</span> bounce &#123;</span><br><span class="line">  <span class="number">60%</span>, <span class="number">80%</span>, <span class="number">100%</span> &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateY</span>(<span class="number">80px</span>);</span><br><span class="line">    <span class="attribute">animation-timing-function</span>: <span class="built_in">cubic-bezier</span>(.<span class="number">215</span>, .<span class="number">61</span>, .<span class="number">355</span>, <span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="number">70%</span> &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateY</span>(<span class="number">60px</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="number">90%</span> &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateY</span>(<span class="number">70px</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.ball</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">20px</span>;<span class="attribute">height</span>:<span class="number">20px</span>;<span class="attribute">background</span>:orange;<span class="attribute">border-radius</span>:<span class="number">50%</span>;<span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br><span class="line">  <span class="attribute">animation</span>: bounce <span class="number">3s</span> <span class="built_in">cubic-bezier</span>(.<span class="number">755</span>, .<span class="number">05</span>, .<span class="number">855</span>, .<span class="number">06</span>) infinite;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>三次贝塞尔曲线可视化：<a target="_blank" rel="noopener" href="https://cubic-bezier.com/">https://cubic-bezier.com</a></p>
+<h3 id="输入框提示效果"><a href="#输入框提示效果" class="headerlink" title="输入框提示效果"></a>输入框提示效果</h3><style>
+  .input-wrap {
+    height: 24px;
+    position: relative;
+  }
+  .input-wrap .callout {
+    background: pink;
+    position: absolute;
+    left: 185px;
+    top: -20px;
+    transform: scale(0);
+    transition: .25s transform;
+  }
+  .input-wrap input:focus + .callout{
+    transition: .5s cubic-bezier(.25, .1, .3, 1.5) transform;
+    transform: scale(1);
+  }
+</style>
+<div class="input-wrap example">
+  <input></input>
+  <div class="callout">一些提示，<br/>比如只能输入数字</div>
+</div>
+
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;input-wrap&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span>&gt;</span><span class="tag">&lt;/<span class="name">input</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;callout&quot;</span>&gt;</span>一些提示，<span class="tag">&lt;<span class="name">br</span>/&gt;</span>比如只能输入数字<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.input-wrap</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">24px</span>;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.input-wrap</span> <span class="selector-class">.callout</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: pink;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">185px</span>;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">0</span>);</span><br><span class="line">  <span class="attribute">transition</span>: .<span class="number">25s</span> transform;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.input-wrap</span> <span class="selector-tag">input</span><span class="selector-pseudo">:focus</span> + <span class="selector-class">.callout</span>&#123;</span><br><span class="line">  <span class="attribute">transition</span>: .<span class="number">5s</span> <span class="built_in">cubic-bezier</span>(.<span class="number">25</span>, .<span class="number">1</span>, .<span class="number">3</span>, <span class="number">1.5</span>) transform;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="逐帧动画"><a href="#逐帧动画" class="headerlink" title="逐帧动画"></a>逐帧动画</h2><h3 id="loading效果"><a href="#loading效果" class="headerlink" title="loading效果"></a>loading效果</h3><p>网上随便找的一个马跑步素材：</p>
+<style>
+  @keyframes run {
+    to {
+      background-position: -550px;
+    }
+  }
+.horse {
+  width: 140px;
+  height: 140px;
+  background: url('/img/horse2.jpg');
+  animation: run 4s steps(4) infinite;
+}
+</style>
+<div class="horse example">
+</div>
+
+<p>核心原理：background-position和steps</p>
+<p>如果Loading图片为100x100,且有8个loading条：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@keyframes</span> loading &#123;</span><br><span class="line">  <span class="selector-tag">from</span> &#123;</span><br><span class="line">    <span class="attribute">background-position</span>: <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="selector-tag">to</span> &#123;</span><br><span class="line">    <span class="attribute">background-position</span>: -<span class="number">800px</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">animation</span>: loading <span class="number">1s</span> <span class="built_in">steps</span>(<span class="number">8</span>) infinite;</span><br></pre></td></tr></table></figure>
+
+<h3 id="闪烁效果"><a href="#闪烁效果" class="headerlink" title="闪烁效果"></a>闪烁效果</h3><style>
+  @keyframes blink {
+    50% { background: transparent; }
+  }
+  .blink-example {
+    width: 1px;
+    height: 20px;
+    background: black;
+    animation: blink 1s steps(1) infinite;
+  }
+</style>
+<div class="blink-example"></div>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">animation</span>: blink <span class="number">1s</span> <span class="built_in">steps</span>(<span class="number">1</span>) infinite;</span><br></pre></td></tr></table></figure>
+
+<h2 id="打字动画"><a href="#打字动画" class="headerlink" title="打字动画"></a>打字动画</h2><style>
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+  }
+  @keyframes caret {
+    50% { border-color: transparent; }
+  }
+  .css-wrap {
+    width: 15ch;
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typing 15s steps(15) infinite, caret 1s steps(1) infinite;
+    border-right: .05em solid;
+  }
+</style>
+<div class="css-wrap">
+CSS is awesome!
+</div>
+<br/>
+<div class="css-wrap">123456789123456</div>
+<br/>
+
+<p>打字动画实际上是文字逐个显示动画+光标闪烁动画</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@keyframes</span> typing &#123;</span><br><span class="line">  <span class="selector-tag">from</span> &#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">h1</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">15ch</span>;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">  <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">  <span class="attribute">animation</span>: typing <span class="number">15s</span> <span class="built_in">steps</span>(<span class="number">15</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">animation</span>: typing <span class="number">15s</span> <span class="built_in">steps</span>(<span class="number">15</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="状态平滑的动画"><a href="#状态平滑的动画" class="headerlink" title="状态平滑的动画"></a>状态平滑的动画</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">animation-play-state</span>: pause;</span><br></pre></td></tr></table></figure>
+
+<h2 id="沿环形路径平移的动画"><a href="#沿环形路径平移的动画" class="headerlink" title="沿环形路径平移的动画"></a>沿环形路径平移的动画</h2><h3 id="方案一"><a href="#方案一" class="headerlink" title="方案一"></a>方案一</h3><p>用内层的变形来抵消外层的变形效果。</p>
+<style>
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+.path {
+  width: 100px;
+  height: 100px;
+  background: orange;
+  border-radius: 50%;
+}
+.avatar {
+  width: 20px;
+  height: 20px;
+  margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+  animation: spin 3s infinite linear;
+  transform-origin: 50% 50px;  /* 50px 是背景圆形的半径 */
+}
+.avatar img {
+  animation: spin 3s infinite linear;
+  animation-direction: reverse;
+}
+</style>
+
+<div class="path example">
+  <div class="avatar">
+    <img src="/img/avatar.jpg">
+  </div>
+</div>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;path&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;avatar&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;/img/avatar.jpg&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@keyframes</span> spin &#123;</span><br><span class="line">  <span class="selector-tag">to</span> &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">rotate</span>(<span class="number">1turn</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.path</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">background</span>: orange;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">50%</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.avatar</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">20px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">20px</span>;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">  <span class="attribute">animation</span>: spin <span class="number">3s</span> infinite linear;</span><br><span class="line">  <span class="attribute">transform-origin</span>: <span class="number">50%</span> <span class="number">50px</span>;  <span class="comment">/* 50px 是背景圆形的半径 */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.avatar</span> <span class="selector-tag">img</span> &#123;</span><br><span class="line">  <span class="attribute">animation</span>: inherit;</span><br><span class="line">  <span class="attribute">animation-direction</span>: reverse;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="方案二"><a href="#方案二" class="headerlink" title="方案二"></a>方案二</h3><p>使用translate模拟transform-origin，从而不需要在Img外层多嵌套一个元素。</p>
+<style>
+@keyframes spin2 {
+  from {
+    transform: translateY(50px)
+              rotate(0turn)
+              translateY(-50px)
+              translateY(50%)
+              rotate(1turn)
+              translateY(-50%)
+  }
+  to {
+    transform: translateY(50px)
+              rotate(1turn)
+              translateY(-50px)
+              translateY(50%)
+              rotate(0turn)
+              translateY(-50%)
+  }
+}
+@keyframes spin3 {
+  from {
+    transform: rotate(0turn)
+              translateY(-50px)
+              translateY(50%)
+              rotate(1turn)
+  }
+  to {
+    transform: rotate(1turn)
+              translateY(-50px)
+              translateY(50%)
+              rotate(0turn)
+  }
+}
+.img {
+  width: 20px;
+  height: 20px;
+  margin: 0 auto;
+  border-radius: 50%;
+  animation: spin2 3s infinite;
+}
+.img2 {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  top: 40px;
+  border-radius: 50%;
+  animation: spin3 3s infinite;
+}
+</style>
+<div class="path example">
+  <img src="/img/avatar.jpg" class="img">
+</div>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;path&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;/img/avatar.jpg&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@keyframes</span> spin2 &#123;</span><br><span class="line">  <span class="selector-tag">from</span> &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateY</span>(<span class="number">50px</span>)</span><br><span class="line">              <span class="built_in">rotate</span>(<span class="number">0turn</span>)</span><br><span class="line">              <span class="built_in">translateY</span>(-<span class="number">50px</span>)</span><br><span class="line">              <span class="built_in">translateY</span>(<span class="number">50%</span>)</span><br><span class="line">              <span class="built_in">rotate</span>(<span class="number">1turn</span>)</span><br><span class="line">              <span class="built_in">translateY</span>(-<span class="number">50%</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="selector-tag">to</span> &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateY</span>(<span class="number">50px</span>)</span><br><span class="line">              <span class="built_in">rotate</span>(<span class="number">1turn</span>)</span><br><span class="line">              <span class="built_in">translateY</span>(-<span class="number">50px</span>)</span><br><span class="line">              <span class="built_in">translateY</span>(<span class="number">50%</span>)</span><br><span class="line">              <span class="built_in">rotate</span>(<span class="number">0turn</span>)</span><br><span class="line">              <span class="built_in">translateY</span>(-<span class="number">50%</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果一开始头像就位于圆心，上面的css代码可简化：<br>也就是把translateY(50px) translateY(-50%)去除，这两句做的实际上就是把头像移到圆心。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@keyframes</span> spin2 &#123;</span><br><span class="line">  <span class="selector-tag">from</span> &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">rotate</span>(<span class="number">0turn</span>)</span><br><span class="line">              <span class="built_in">translateY</span>(-<span class="number">50px</span>)</span><br><span class="line">              <span class="built_in">translateY</span>(<span class="number">50%</span>)</span><br><span class="line">              <span class="built_in">rotate</span>(<span class="number">1turn</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="selector-tag">to</span> &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">rotate</span>(<span class="number">1turn</span>)</span><br><span class="line">              <span class="built_in">translateY</span>(-<span class="number">50px</span>)</span><br><span class="line">              <span class="built_in">translateY</span>(<span class="number">50%</span>)</span><br><span class="line">              <span class="built_in">rotate</span>(<span class="number">0turn</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:2316636696@qq.com">Duan lvxin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://duanlvxin.github.io/2022/06/22/css%E5%8A%A8%E7%94%BB%E6%95%88%E6%9E%9C/">https://duanlvxin.github.io/2022/06/22/css%E5%8A%A8%E7%94%BB%E6%95%88%E6%9E%9C/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://duanlvxin.github.io" target="_blank">小段的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/css/">css</a><a class="post-meta__tags" href="/tags/css%E6%8F%AD%E7%A7%98/">css揭秘</a></div><div class="post_share"><div class="social-share" data-image="/img/css-secret.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/05/04/css%E7%94%A8%E6%88%B7%E4%BD%93%E9%AA%8C/"><img class="next-cover" src="/img/css-secret.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">css用户体验</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/04/10/css%E5%AD%97%E4%BD%93%E6%8E%92%E5%8D%B0/" title="css字体排印"><img class="cover" src="/img/css-secret.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-10</div><div class="title">css字体排印</div></div></a></div><div><a href="/2022/04/03/css%E5%BD%A2%E7%8A%B6/" title="css形状"><img class="cover" src="/img/css-secret.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-03</div><div class="title">css形状</div></div></a></div><div><a href="/2022/05/04/css%E7%94%A8%E6%88%B7%E4%BD%93%E9%AA%8C/" title="css用户体验"><img class="cover" src="/img/css-secret.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-04</div><div class="title">css用户体验</div></div></a></div><div><a href="/2022/03/27/css%E8%83%8C%E6%99%AF%E4%B8%8E%E8%BE%B9%E6%A1%86/" title="css背景与边框"><img class="cover" src="/img/css-secret.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-27</div><div class="title">css背景与边框</div></div></a></div><div><a href="/2022/04/09/css%E8%A7%86%E8%A7%89%E6%95%88%E6%9E%9C/" title="css视觉效果"><img class="cover" src="/img/css-secret.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-09</div><div class="title">css视觉效果</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%93%E5%8A%A8%E5%8A%A8%E7%94%BB"><span class="toc-number">1.</span> <span class="toc-text">缓动动画</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%90%83%E4%B8%8B%E8%90%BD%E6%95%88%E6%9E%9C"><span class="toc-number">1.1.</span> <span class="toc-text">小球下落效果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E6%A1%86%E6%8F%90%E7%A4%BA%E6%95%88%E6%9E%9C"><span class="toc-number">1.2.</span> <span class="toc-text">输入框提示效果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%90%E5%B8%A7%E5%8A%A8%E7%94%BB"><span class="toc-number">2.</span> <span class="toc-text">逐帧动画</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#loading%E6%95%88%E6%9E%9C"><span class="toc-number">2.1.</span> <span class="toc-text">loading效果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AA%E7%83%81%E6%95%88%E6%9E%9C"><span class="toc-number">2.2.</span> <span class="toc-text">闪烁效果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%93%E5%AD%97%E5%8A%A8%E7%94%BB"><span class="toc-number">3.</span> <span class="toc-text">打字动画</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E5%B9%B3%E6%BB%91%E7%9A%84%E5%8A%A8%E7%94%BB"><span class="toc-number">4.</span> <span class="toc-text">状态平滑的动画</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B2%BF%E7%8E%AF%E5%BD%A2%E8%B7%AF%E5%BE%84%E5%B9%B3%E7%A7%BB%E7%9A%84%E5%8A%A8%E7%94%BB"><span class="toc-number">5.</span> <span class="toc-text">沿环形路径平移的动画</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E4%B8%80"><span class="toc-number">5.1.</span> <span class="toc-text">方案一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E4%BA%8C"><span class="toc-number">5.2.</span> <span class="toc-text">方案二</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url('/img/css-secret.jpg'); background-size: cover"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Duan lvxin</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
