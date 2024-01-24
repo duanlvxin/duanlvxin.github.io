@@ -4,7 +4,7 @@
   
     
     <entry>
-      <title>css视觉效果</title>
+      <title>css动画效果</title>
       <link href="/2022/06/22/css%E5%8A%A8%E7%94%BB%E6%95%88%E6%9E%9C/"/>
       <url>/2022/06/22/css%E5%8A%A8%E7%94%BB%E6%95%88%E6%9E%9C/</url>
       
@@ -50,6 +50,31 @@
             <tag> css </tag>
             
             <tag> css揭秘 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>typescript类型全解</title>
+      <link href="/2022/04/17/typescript%E7%B1%BB%E5%9E%8B%E5%85%A8%E8%A7%A3/"/>
+      <url>/2022/04/17/typescript%E7%B1%BB%E5%9E%8B%E5%85%A8%E8%A7%A3/</url>
+      
+        <content type="html"><![CDATA[<h2 id="typescript类型"><a href="#typescript类型" class="headerlink" title="typescript类型"></a>typescript类型</h2><h2 id="类型浅谈"><a href="#类型浅谈" class="headerlink" title="类型浅谈"></a>类型浅谈</h2><h3 id="any"><a href="#any" class="headerlink" title="any"></a>any</h3><p>开启了strict: true, 隐式any会报错（函数中未定义类型的参数）；但是导入其他文件的时候不显示报错？（require(‘xxx.js’)）</p><h3 id="unknown"><a href="#unknown" class="headerlink" title="unknown"></a>unknown</h3><h3 id="number"><a href="#number" class="headerlink" title="number"></a>number</h3><h3 id="string"><a href="#string" class="headerlink" title="string"></a>string</h3><h3 id="boolean"><a href="#boolean" class="headerlink" title="boolean"></a>boolean</h3><h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>数组<br>元组</p><h3 id="undefined、null、nerver、void"><a href="#undefined、null、nerver、void" class="headerlink" title="undefined、null、nerver、void"></a>undefined、null、nerver、void</h3><p>undefined: 变量未定义<br>null: 类型不存在<br>nerver：函数一直执行<br>void: 函数没有显示return</p><h2 id="类型别名"><a href="#类型别名" class="headerlink" title="类型别名"></a>类型别名</h2><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">Age</span> = <span class="built_in">number</span>;</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> typescript </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> typescript </tag>
             
         </tags>
       
@@ -183,6 +208,31 @@
             <tag> css </tag>
             
             <tag> css揭秘 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>hexo+butterfly主题+自动部署构建博客</title>
+      <link href="/2022/03/12/hexo-butterfly%E4%B8%BB%E9%A2%98-%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E6%9E%84%E5%BB%BA%E5%8D%9A%E5%AE%A2/"/>
+      <url>/2022/03/12/hexo-butterfly%E4%B8%BB%E9%A2%98-%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E6%9E%84%E5%BB%BA%E5%8D%9A%E5%AE%A2/</url>
+      
+        <content type="html"><![CDATA[<h1 id="使用hexo搭建博客"><a href="#使用hexo搭建博客" class="headerlink" title="使用hexo搭建博客"></a>使用hexo搭建博客</h1><h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br><span class="line">hexo init blog</span><br><span class="line"><span class="built_in">cd</span> blog</span><br><span class="line">npm install</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure><h2 id="命令配置"><a href="#命令配置" class="headerlink" title="命令配置"></a>命令配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">server: <span class="string">&quot;hexo server --log&quot;</span> // 添加--<span class="built_in">log</span>打印日志</span><br></pre></td></tr></table></figure><h2 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h2><h3 id="热更新"><a href="#热更新" class="headerlink" title="热更新"></a>热更新</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-browsersync --save</span><br></pre></td></tr></table></figure><p>​        注意：更改_config.yml等配置文件需要重新运行；</p><h1 id="butterfly主题配置"><a href="#butterfly主题配置" class="headerlink" title="butterfly主题配置"></a>butterfly主题配置</h1><h2 id="主题下载使用"><a href="#主题下载使用" class="headerlink" title="主题下载使用"></a>主题下载使用</h2><p>butterfly [<a href="https://butterfly.js.org/posts/21cfbf15/#%E5%AE%89%E8%A3%9D]">https://butterfly.js.org/posts/21cfbf15/#%E5%AE%89%E8%A3%9D]</a></p><p>可以使用npm包，也可以克隆代码。这边选择克隆代码，好处是可以更自由地编辑，不过clone 下来目录下存在.git文件夹，需要进行删除：可参考这篇文章 <a href="https://blog.csdn.net/xiebaochun/article/details/114143346">https://blog.csdn.net/xiebaochun/article/details/114143346</a></p><h3 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> -b master https://github.com/jerryc127/hexo-theme-butterfly.git themes/butterfly</span><br></pre></td></tr></table></figure><p>会在themes文件夹下生成butterfly目录</p><h3 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h3><p>修改_config.yaml里的theme</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">theme:</span> <span class="string">butterfly</span></span><br></pre></td></tr></table></figure><h3 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h3><p>安装pug和stylus渲染器</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-renderer-pug hexo-renderer-stylus --save</span><br></pre></td></tr></table></figure><h2 id="主题配置优化"><a href="#主题配置优化" class="headerlink" title="主题配置优化"></a>主题配置优化</h2><h1 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h1><h2 id="一键部署"><a href="#一键部署" class="headerlink" title="一键部署"></a>一键部署</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure><p>​        编辑_config.yaml</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">url:</span> <span class="string">https://duanlvxin.github.io</span></span><br><span class="line"></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/duanlvxin/duanlvxin.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure><p>​        执行部署命令</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure><p>​    查看&lt;username&gt;.github.io</p><h2 id="使用github-actions"><a href="#使用github-actions" class="headerlink" title="使用github actions"></a>使用github actions</h2><p>在.github的workflows文件下新建deploy.yml(文件名可以变，文件夹必须是workflows)</p><p>源码在dev分支上，打包好的文件在master上；<br>HEXO_DEPLOY_KEY是github上配置的</p><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">Hexo</span> <span class="string">Deploy</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">dev</span></span><br><span class="line">    </span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-18.04</span></span><br><span class="line">    <span class="attr">if:</span> <span class="string">github.event.repository.owner.id</span> <span class="string">==</span> <span class="string">github.event.sender.id</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Checkout</span> <span class="string">source</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/checkout@v2</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">ref:</span> <span class="string">dev</span></span><br><span class="line"></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Setup</span> <span class="string">Node.js</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/setup-node@v1</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">node-version:</span> <span class="string">&#x27;16&#x27;</span></span><br><span class="line"></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Setup</span> <span class="string">Hexo</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          npm install hexo-cli -g</span></span><br><span class="line"><span class="string">          npm install</span></span><br><span class="line"><span class="string"></span>          </span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Build</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          hexo clean</span></span><br><span class="line"><span class="string">          hexo generate</span></span><br><span class="line"><span class="string"></span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Deploy</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">JamesIves/github-pages-deploy-action@v4.2.5</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">branch:</span> <span class="string">master</span></span><br><span class="line">          <span class="attr">folder:</span> <span class="string">public</span></span><br><span class="line">          <span class="attr">ssh-key:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.HEXO_DEPLOY_KEY</span> <span class="string">&#125;&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> hexo </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> hexo </tag>
             
         </tags>
       
