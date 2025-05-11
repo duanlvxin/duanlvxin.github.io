@@ -259,6 +259,7 @@ class MyMap<K,V> {
 final：把类标记为不可扩展，把方法标记为不可覆盖
 
 在ts中可以用private来模拟实现final类
+(构造函数前用private,不能继承也不能new; 如果构造函数前是protected,那么可以继承，不能new)
 ```ts
 class Person {
   private constructor(private name: string) {
