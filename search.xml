@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>type-challenges-medium</title>
+      <link href="/2025/05/13/type-challenges-medium/"/>
+      <url>/2025/05/13/type-challenges-medium/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Get-Return-Type"><a href="#Get-Return-Type" class="headerlink" title="Get Return Type"></a>Get Return Type</h2><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">MyReturnType</span>&lt;T&gt; = T <span class="keyword">extends</span> (...<span class="attr">args</span>: <span class="built_in">any</span>[]) =&gt; (infer R) ? R : <span class="built_in">never</span></span><br></pre></td></tr></table></figure><h2 id="Omit-使用as-）"><a href="#Omit-使用as-）" class="headerlink" title="Omit (使用as*）"></a>Omit (使用as*）</h2><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">MyOmit</span>&lt;T, K <span class="keyword">extends</span> keyof T&gt; = &#123;[P <span class="keyword">in</span> keyof T <span class="keyword">as</span> P <span class="keyword">extends</span> K ? <span class="attr">never</span>: P] :T[P]&#125;</span><br></pre></td></tr></table></figure><h2 id="Reanonly-使用交集-amp"><a href="#Reanonly-使用交集-amp" class="headerlink" title="Reanonly (使用交集&amp;)"></a>Reanonly (使用交集&amp;)</h2><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">MyReadonly2</span>&lt;T, K <span class="keyword">extends</span> keyof T =  keyof T&gt; = &#123;</span><br><span class="line">  <span class="keyword">readonly</span> [P <span class="keyword">in</span> K]: T[P]</span><br><span class="line">&#125; &amp; &#123;</span><br><span class="line">  [P <span class="keyword">in</span> keyof T <span class="keyword">as</span> P <span class="keyword">extends</span> K ? <span class="built_in">never</span> : P]: T[P]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">MyReadonly2</span>&lt;T, K <span class="keyword">extends</span> keyof T =  keyof T&gt; = &#123;</span><br><span class="line">  <span class="keyword">readonly</span> [P <span class="keyword">in</span> K]: T[P]</span><br><span class="line">&#125; &amp; <span class="title class_">MyOmit</span>&lt;T, K&gt;</span><br></pre></td></tr></table></figure><h2 id="Deep-Reanonly"><a href="#Deep-Reanonly" class="headerlink" title="Deep Reanonly"></a>Deep Reanonly</h2><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">DeepReadonly</span>&lt;T&gt; = T <span class="keyword">extends</span> &#123;&#125; ? (T <span class="keyword">extends</span> (...<span class="attr">args</span>: []) =&gt; <span class="built_in">any</span> ? T : &#123;</span><br><span class="line">  <span class="keyword">readonly</span> [key <span class="keyword">in</span> keyof T]: <span class="title class_">DeepReadonly</span>&lt;T[key]&gt;</span><br><span class="line">&#125;) : T</span><br></pre></td></tr></table></figure><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 高赞答案</span></span><br><span class="line"><span class="keyword">type</span> <span class="title class_">DeepReadonly</span>&lt;T&gt; = keyof T <span class="keyword">extends</span> <span class="built_in">never</span></span><br><span class="line">  ? T</span><br><span class="line">  : &#123; <span class="keyword">readonly</span> [k <span class="keyword">in</span> keyof T]: <span class="title class_">DeepReadonly</span>&lt;T[k]&gt; &#125;;</span><br></pre></td></tr></table></figure><h2 id="Tuple-to-Union"><a href="#Tuple-to-Union" class="headerlink" title="Tuple to Union"></a>Tuple to Union</h2><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">TupleToUnion</span>&lt;T&gt; = T <span class="keyword">extends</span> (infer U)[] ? U : <span class="built_in">never</span></span><br></pre></td></tr></table></figure><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 另一种解法</span></span><br><span class="line"><span class="keyword">type</span> <span class="title class_">TupleToUnion</span>&lt;T <span class="keyword">extends</span> unknown[]&gt; = T[<span class="built_in">number</span>]</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> typescript </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> typescript </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>type-challenges-easy</title>
       <link href="/2025/05/12/type-challenges-easy/"/>
       <url>/2025/05/12/type-challenges-easy/</url>
