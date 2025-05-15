@@ -104,3 +104,20 @@ declare function PromiseAll<T extends any[]>(values: readonly [...T]):
 ```ts
 type LookUp<U, T> = U extends {type: T} ? U : never;
 ```
+
+## Trim Left
+```ts
+type space = ' ' | '\n' | '\t'
+type TrimLeft<S extends string> = S extends `${space}${infer R}` ? TrimLeft<R> : S
+```
+
+## Trim
+```ts
+type Trim<S extends string> = S extends `${space}${infer R}` ? Trim<R> : S extends `${infer U}${space}` ? Trim<U> : S
+```
+
+同理，trim right
+```ts
+type space = ' ' | '\n' | '\t'
+type TrimRight<S extends string> = S extends `${infer R}${space}` ? TrimRight<R> : S
+```
