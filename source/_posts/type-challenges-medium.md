@@ -121,3 +121,23 @@ type Trim<S extends string> = S extends `${space}${infer R}` ? Trim<R> : S exten
 type space = ' ' | '\n' | '\t'
 type TrimRight<S extends string> = S extends `${infer R}${space}` ? TrimRight<R> : S
 ```
+
+## Capitalize(内置的Uppercase)
+```ts
+type MyCapitalize<S extends string> = S extends `${infer R}${infer Rest}` ? `${Uppercase<R>}${Rest}` : S
+```
+
+## Replace
+```ts
+type Replace<S extends string, From extends string, To extends string> =
+  From extends '' ? S :
+    S extends `${infer P}${From}${infer R}` ? `${P}${To}${R}` : S
+```
+
+## Replace all
+```ts
+type ReplaceAll<S extends string, From extends string, To extends string> = 
+  S extends '' ? '' : 
+    From extends '' ? S :
+      S extends `${infer R}${From}${infer U}` ? U extends `${infer M}${From}${infer N}` ?  `${R}${To}${ReplaceAll<U, From, To>}`: `${R}${To}${U}` : S
+```
