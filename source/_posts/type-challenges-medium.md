@@ -19,7 +19,7 @@ type MyReturnType<T> = T extends (...args: any[]) => (infer R) ? R : never
 type MyOmit<T, K extends keyof T> = {[P in keyof T as P extends K ? never: P] :T[P]}
 ```
 
-## Reanonly (使用交集&)
+## Reanonly2 (使用交集&)
 ```ts
 type MyReadonly2<T, K extends keyof T =  keyof T> = {
   readonly [P in K]: T[P]
@@ -140,4 +140,48 @@ type ReplaceAll<S extends string, From extends string, To extends string> =
   S extends '' ? '' : 
     From extends '' ? S :
       S extends `${infer R}${From}${infer U}` ? U extends `${infer M}${From}${infer N}` ?  `${R}${To}${ReplaceAll<U, From, To>}`: `${R}${To}${U}` : S
+```
+
+## Append Argument
+```ts
+type AppendArgument<Fn extends (...args: any[]) => any, A> =
+  Fn extends (...args: infer R) => infer T ? (...args: [...R, A]) => T : never
+```
+
+## Permutation(条件分配 & 条件类型)
+```ts
+type Permutation<T, K = T> =
+  [T] extends [never]
+    ? []
+    : K extends K
+      ? [K, ...Permutation<Exclude<T, K>>]
+      : never
+```
+
+(关于`[T] extends [never]`的分析：https://github.com/type-challenges/type-challenges/issues/614)
+
+## Length of string
+```ts
+type StringToArray<S extends string> = S extends `${infer first}${infer Rest}` ? [first, ...StringToArray<Rest>] : [] 
+type LengthOfString<S extends string> = StringToArray<S>["length"]
+```
+
+## Flatten
+```ts
+type Flatten<T extends any[]> = 
+  T extends [infer First, ...infer Rest] 
+    ? First extends any[] ? [...Flatten<First>, ...Flatten<Rest>] : [First, ...Flatten<Rest>]
+    : []
+```
+
+## Append to object
+```ts
+type AppendToObject<T, U extends string | number | symbol, V> = 
+  {[key in (keyof T) | U]: key extends U ? V : key extends keyof T ? T[key] : never}
+```
+
+```ts
+// 更简洁的写法
+type AppendToObject<T, U extends string | number | symbol, V> = 
+  {[key in (keyof T) | U]: key extends keyof T ? T[key] : V}
 ```
