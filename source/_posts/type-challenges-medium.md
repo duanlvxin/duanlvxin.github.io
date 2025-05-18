@@ -159,6 +159,12 @@ type Permutation<T, K = T> =
 ```
 
 (关于`[T] extends [never]`的分析：https://github.com/type-challenges/type-challenges/issues/614)
+```ts
+// 这里的结果是never, 因为IsNever<never> 中的 never 实际上是一个空的联合类型，一项都没有，所以 T extends ... 过程实际上被整体跳过了，所以最后的结果就是 never。
+// ts 中对于 A | B extends C 的计算会转为A extends C | B extends C, 且会跳过never
+type IsNever<T> = T extends never ? true : false
+type Result = IsNever<never>
+```
 
 ## Length of string
 ```ts
@@ -184,4 +190,109 @@ type AppendToObject<T, U extends string | number | symbol, V> =
 // 更简洁的写法
 type AppendToObject<T, U extends string | number | symbol, V> = 
   {[key in (keyof T) | U]: key extends keyof T ? T[key] : V}
+```
+
+## Absolute
+```ts
+// your answer
+type Replace<S extends string, From extends string, To extends string> =
+  From extends '' ? S :
+    S extends `${infer P}${From}${infer R}` ? `${P}${To}${R}` : S
+
+type Absolute<T extends number | string | bigint> = Replace<`${T}`, '-', ''>
+```
+
+```ts
+// 优解
+type Absolute<T extends number | string | bigint> = 
+  `${T}` extends `-${infer R}` ? `${R}` : `${T}`
+```
+
+使用模板字符串将数组转换为字符串时，编译器会自动进行转换
+```ts
+type NumToStr<
+  T extends number | bigint
+> = `${T}`
+
+type A = NumToStr<123> // "123"
+type B = NumToStr<1_2345> // "12345"
+type C = NumToStr<0xF123> // "61731"
+type D = NumToStr<0o123> // 83
+type E = NumToStr<1e5> // "100000"
+type F = NumToStr<123n> // 123
+```
+
+## String to Union
+```ts
+type StringToUnion<T extends string> = 
+  T extends `${infer R}${infer Rest}` ? R | StringToUnion<Rest> : never
+```
+
+## Merge
+```ts
+type Merge<F, S> = {
+  [key in (keyof F | keyof S)]: key extends keyof S ? S[key] : key extends keyof F ? F[key] : never
+}
+```
+
+## KebabCase
+```ts
+// your answer
+type IsUpperCase<S extends string> = 
+  S extends Uppercase<S> & Lowercase<S> ? false : S extends Uppercase<S> ? true : false
+
+type KebabCase<S, First = true> = 
+  S extends `${infer R}${infer Rest}`
+    ? `${[IsUpperCase<R>, First] extends [true, false] ? '-' : ''}${IsUpperCase<R> extends true ? Lowercase<R> : R}${KebabCase<Rest, false>}` :
+    ''
+```
+
+```ts
+// 优解
+type KebabCase<S extends string> = S extends `${infer S1}${infer S2}`
+  ? S2 extends Uncapitalize<S2>
+  ? `${Uncapitalize<S1>}${KebabCase<S2>}`
+  : `${Uncapitalize<S1>}-${KebabCase<S2>}`
+  : S;
+```
+
+## Diff
+```ts
+// your answer
+type Diff<O, O1> = {
+  [key in (keyof O1 | keyof O ) as key extends (keyof O1 & keyof O) ? never : key ]: key extends keyof O1 ? O1[key] : key extends keyof O ? O[key]: never
+}
+```
+
+```ts
+// better answer
+type Diff<O, O1> = Omit<O & O1, keyof (O | O1)>
+```
+
+```ts
+// better answer
+type Diff<O, O1> = {
+  [K in Exclude<keyof (O & O1), keyof(O | O1)>]: (O & O1)[K]
+}
+```
+
+## Any of
+```ts
+// your answer
+type isTrue<T> = T extends 0 | '' | false | [] | {[key: string]: never} | undefined | null ? false : true
+type AnyOf<T extends readonly any[]> = 
+  T extends [infer R, ...infer Rest] 
+    ? isTrue<R> extends true ? true: AnyOf<Rest>
+    : false
+```
+
+```ts
+// better answer
+type AnyOf<T extends any[]> = T[number] extends 0 | '' | false | [] | {[key: string]: never} | undefined | null
+? false : true;
+```
+
+## IsNever
+```ts
+type IsNever<T> = [T] extends [never] ? true : false
 ```
