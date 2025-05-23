@@ -296,3 +296,53 @@ type AnyOf<T extends any[]> = T[number] extends 0 | '' | false | [] | {[key: str
 ```ts
 type IsNever<T> = [T] extends [never] ? true : false
 ```
+
+## Is Union(*)
+```ts
+type IsUnionImpl<T, C extends T = T> = (T extends T ? C extends T ? true : unknown : never) extends true ? false : true;
+type IsUnion<T> = IsUnionImpl<T>;
+```
+
+```js
+IsUnion<string>
+=> IsUnionImpl<string, string>
+=> (string extends string ? string extends string ? true : unknown : never) extends true ? false : true
+=> (string extends string ? true : unknown) extends true ? false : true
+=> (true) extends true ? false : true
+=> false
+
+IsUnion<string|number>
+=> IsUnionImpl<string|number, string|number>
+=> (string|number extends string|number ? string|number extends string|number ? true : unknown : never) extends true ? false : true
+=> (
+  (string extends string|number ? string|number extends string ? true : unknown : never) |
+  (number extends string|number ? string|number extends number ? true : unknown : never)
+) extends true ? false : true
+=> (
+  (string|number extends string ? true : unknown) |
+  (string|number extends number ? true : unknown)
+) extends true ? false : true
+=> (
+  (
+    (string extends string ? true : unknown) |
+    (number extends string ? true : unknown)
+  ) |
+  (
+    (string extends number ? true : unknown) |
+    (number extends number ? true : unknown)
+  )
+) extends true ? false : true
+=> (
+  (
+    (true) |
+    (unknown)
+  ) |
+  (
+    (unknown) |
+    (true)
+  )
+) extends true ? false : true
+=> (true|unknown) extends true ? false : true
+=> (unknown) extends true ? false : true
+=> true
+```
