@@ -142,6 +142,13 @@ type ReplaceAll<S extends string, From extends string, To extends string> =
       S extends `${infer R}${From}${infer U}` ? U extends `${infer M}${From}${infer N}` ?  `${R}${To}${ReplaceAll<U, From, To>}`: `${R}${To}${U}` : S
 ```
 
+其实可以这样写：
+```ts
+type ReplaceAll<S extends string, From extends string, To extends string> = 
+  From extends '' ? S :
+    S extends `${infer R}${From}${infer U}` ? `${R}${To}${ReplaceAll<U, From, To>}` : S
+```
+
 ## Append Argument
 ```ts
 type AppendArgument<Fn extends (...args: any[]) => any, A> =
@@ -407,4 +414,208 @@ type RemoveIndexSignature<T, P = PropertyKey> = {
 
 // 如果K是'a'
 // 那么就是'a' | never | never => 'a'
+```
+
+## Percentage Parser
+```ts
+```
+
+## Drop Char
+```ts
+// your answer - 利用之前的ReplaceAll
+type ReplaceAll<S extends string, From extends string, To extends string> = 
+  From extends '' ? S :
+    S extends `${infer R}${From}${infer U}` ? `${R}${To}${ReplaceAll<U, From, To>}` : S
+
+type DropChar<S extends string, C extends string> = ReplaceAll<S, C, ''>
+```
+
+```ts
+// smarter answer
+type DropChar<S, C extends string> = S extends `${infer L}${C}${infer R}` ? DropChar<`${L}${R}`, C> : S;
+```
+
+## MinusOne
+```
+```
+
+## PickByType
+```ts
+type PickByType<T, U> = {
+  [key in keyof T as T[key] extends U ? key : never] : T[key]
+}
+```
+
+## StartsWith
+```ts
+type StartsWith<T extends string, U extends string> = 
+  T extends `${U}${infer R}` ? true : false
+```
+
+// infer R 可以换成string
+```ts
+type StartsWith<T extends string, U extends string> = 
+  T extends `${U}${string}` ? true : false
+```
+
+## EndsWith
+```ts
+type EndsWith<T extends string, U extends string> =
+  T extends `${infer R}${U}` ? true : false
+```
+
+## PartialByKeys
+```ts
+// your answer
+type PartialByKeys<T, K extends keyof T = keyof T> = {
+  [key in keyof T as key extends K ? never : key] : T[key]
+} & {
+  [key in keyof T as key extends K ? key : never]? : T[key]
+}
+```
+
+```ts
+type IntersectionToObj<T> = {
+  [K in keyof T]: T[K]
+}
+
+type PartialByKeys<T, K extends keyof T = keyof T> = IntersectionToObj<{
+  [key in keyof T as key extends K ? never : key] : T[key]
+} & {
+  [key in keyof T as key extends K ? key : never]? : T[key]
+}>
+```
+
+## RequiredByKeys
+```ts
+type IntersectionToObj<T> = {
+  [K in keyof T]: T[K]
+}
+type RequiredByKeys<T, K extends keyof T = keyof T> = IntersectionToObj<{
+  [key in keyof T as key extends K ? never : key] : T[key]
+} & {
+  [key in keyof T as key extends K ? key : never]-? : T[key]
+}>
+```
+
+// 或者使用Omit
+```ts
+type RequiredByKeys<
+  T, 
+  K extends keyof T = keyof T,
+  O = Omit<T, K> & { [P in K]-?: T[P] }
+> = { [P in keyof O]: O[P] }
+```
+
+## Mutable
+实现一个通用的类型 Mutable<T>，使类型 T 的全部属性可变（非只读）。
+
+```ts
+type Mutable<T extends object> = {
+  -readonly [key in keyof T]: T[key]
+}
+```
+
+## OmitByType
+从T中，把值不能赋值给U的那些属性排除
+```ts
+type OmitByType<T, U> = {
+  [key in keyof T as T[key] extends U ? never : key] : T[key]
+}
+```
+
+## ObjectEntries
+// 实现类型版本的Object.entries
+```ts
+interface Model {
+  name: string;
+  age: number;
+  locations: string[] | null;
+}
+type modelEntries = ObjectEntries<Model> // ['name', string] | ['age', number] | ['locations', string[] | null];
+```
+
+```ts
+type ObjectEntries<T, K extends keyof T = keyof T> = 
+  K extends PropertyKey ? [K, T[K]]: never
+
+// 这个用例Expect<Equal<ObjectEntries<Partial<Model>>, ModelEntries>>会通不过
+// 感觉是用例本身有问题，
+// 应该和['name', string | undefined] | ['age', number | undefined] | ['locations', string[] | null | undefined]相等
+```
+
+// 另一种解法
+```ts
+// 数组转联合类型用 [number] 作为下标
+// ['1', '2']['number'] // '1' | '2'
+// 对象则是用 [keyof T] 作为下标
+
+type ObjectToUnion<T> = T[keyof T]
+type ObjectEntries<T> = {
+  [K in keyof T]-?: [K, T[K]]
+}[keyof T]
+```
+
+## Shift
+```ts
+type Shift<T extends any[]> = T extends [infer R, ...infer Rest] ? Rest : []
+```
+
+## TupleToNestedObject
+例子：
+```ts
+type a = TupleToNestedObject<['a'], string> // {a: string}
+type b = TupleToNestedObject<['a', 'b'], number> // {a: {b: number}}
+type c = TupleToNestedObject<[], boolean> // boolean. if the tuple is empty, just return the U type
+```
+
+```ts
+// your answer
+type TupleToNestedObject<T extends string[], U> =
+   T extends [] ? U:
+    T extends [infer R extends string] ? { [key in R] : U }: 
+      T extends [infer R extends string, ...infer Rest extends string[]] ? { [key in R] : TupleToNestedObject<Rest, U>} : U
+```
+
+```ts
+// better answer
+type TupleToNestedObject<T, U> = T extends [infer F,...infer R]?
+  {
+    [K in F&string]:TupleToNestedObject<R,U>
+  }
+  :U
+```
+
+## Reverse
+```ts
+type Reverse<T extends any[]> = T extends [infer R, ...infer Rest] ? [...Reverse<Rest>, R] : []
+```
+
+## FlipArgument
+```ts
+// your answer 错误解答 => 有办法在这基础上改正吗
+type Reverse<T extends any[]> = T extends [infer R, ...infer Rest] ? [...Reverse<Rest>, R] : []
+type FlipArguments<T extends (...args: any[]) => any> = 
+  T extends (...args: infer A) => infer R
+    ? (...args: { [key in keyof Reverse<A>]: (Reverse<A>)[key]}) => R
+    : never
+```
+
+```ts
+// 正确解答
+type Reverse<T extends any[]> = T extends [infer R, ...infer Rest] ? [...Reverse<Rest>, R] : []
+type FlipArguments<T extends (...args: any[]) => any> = 
+  T extends (...args: infer A) => infer R
+    ? (...args: Reverse<A>) => R
+    : never
+```
+
+## FlattenDepth
+```ts
+// MinusOne是之前的的MinusOne
+type FlattenDepth<T extends any[], num extends number = 1> = 
+num extends 0 ? T :
+  T extends [infer First, ...infer Rest] 
+    ? First extends any[] ? [...FlattenDepth<First, MinusOne<num>>, ...FlattenDepth<Rest, num>] : [First, ...FlattenDepth<Rest, num>]
+    : []
 ```
