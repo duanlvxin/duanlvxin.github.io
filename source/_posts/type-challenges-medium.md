@@ -346,3 +346,65 @@ IsUnion<string|number>
 => (unknown) extends true ? false : true
 => true
 ```
+
+## ReplaceKeys
+```ts
+type ReplaceKeys<U, T, Y> =
+  {[key in keyof U]: key extends T ? key extends keyof Y ? Y[key]: never: U[key]}
+```
+
+## Remove Index Signature(PropertyKey*)
+// 怎么判断index signature ? - 使用PropertyKey
+```ts
+type RemoveIndexSignature<T> = {
+  [K in keyof T as
+    /* filters out all 'string' keys */
+    string extends K
+      ? never
+      /* filters out all 'number' keys */
+      : number extends K
+        ? never
+        /* filers out all 'symbol' keys */
+        : symbol extends K
+          ? never 
+          : K /* all that's left are literal type keys */
+  ]: T[K]
+}
+```
+
+=> 简化
+```ts
+type RemoveIndexSignature<T, P = PropertyKey> = {
+  [K in keyof T as P extends K ? never : K extends P ? K : never]: T[K]
+}
+
+// string extends K ? never : K extends string ? K : never |
+// number extends K ? never : K extends number ? K : never |
+// symbol extends K ? never : K extends symbol ? K : never |
+
+// 如果K是[key in string]
+// 那么就是 never | never | never => never
+
+
+// 如果K是'a'
+// 那么就是'a' | never | never => 'a'
+```
+
+
+为什么不是下面这种写法？
+```ts
+type RemoveIndexSignature<T, P = PropertyKey> = {
+  [K in keyof T as P extends K ? never : K]: T[K]
+}
+
+// string extends K ? never : K |
+// number extends K ? never : K |
+// symbol extends K ? never : K
+
+// 如果K是[key in string]
+// 那么就是 K | never | never => K
+
+
+// 如果K是'a'
+// 那么就是'a' | never | never => 'a'
+```
