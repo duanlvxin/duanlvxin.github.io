@@ -435,7 +435,7 @@ type DropChar<S extends string, C extends string> = ReplaceAll<S, C, ''>
 type DropChar<S, C extends string> = S extends `${infer L}${C}${infer R}` ? DropChar<`${L}${R}`, C> : S;
 ```
 
-## MinusOne
+## MinusOne（*）
 ```
 ```
 
@@ -618,4 +618,193 @@ num extends 0 ? T :
   T extends [infer First, ...infer Rest] 
     ? First extends any[] ? [...FlattenDepth<First, MinusOne<num>>, ...FlattenDepth<Rest, num>] : [First, ...FlattenDepth<Rest, num>]
     : []
+```
+
+## BEM style string(`T[number]`和条件分配*)
+```ts
+type BEM<B extends string, E extends string[],M extends string[]> = 
+  `${B}${E extends [] ? '' : `__${E[number]}`}${M extends [] ? '' : `--${M[number]}`}`
+```
+
+解析：
+```ts
+可以通过下标来将数组或者对象转成联合类型
+// 数组
+T[number]
+// 对象  
+Object[keyof T]
+
+特殊的，当字符串中通过这种方式申明时，会自动生成新的联合类型，例如这题下面的写法，
+type BEM<B extends string, E extends string[], M extends string[]> = `${B}__${E[number]}--${M[number]}`
+```
+
+## InorderTraversal
+```ts
+type InorderTraversal<T extends TreeNode | null> = 
+  T extends null ? [] : 
+    [
+      ...InorderTraversal<T extends TreeNode ? T['left'] : null>,
+      T extends TreeNode? T['val'] : null,
+      ...InorderTraversal<T extends TreeNode ? T['right']: null>
+    ]
+```
+
+```ts
+type InorderTraversal<T extends TreeNode | null, NT extends TreeNode = NonNullable<T>> =
+  T extends null
+    ? []
+    : [...InorderTraversal<NT['left']>, NT['val'], ...InorderTraversal<NT['right']>]
+```
+
+**解析**
+为什么需要判断NT?
+因为条件分配，T['left']可能是null
+
+## Flip
+```ts
+// 1.使用as 2.使用``
+type Flip<T extends Record<any, any>> = {
+  [P in keyof T as `${T[P]}`]: P
+}
+```
+
+```ts
+// 如果只是把下标变成值的话：
+type Flip<T extends object> = {
+  [key in T[keyof T] & PropertyKey]: key
+}
+```
+
+## Fibonacci Sequence
+```ts
+// Helper type to get the length of a tuple
+type Length<T extends any[]> = T['length'];
+
+// Fibonacci implementation - index的长度相当于下标
+type Fibonacci<
+  T extends number,
+  Index extends any[] = [1],
+  Prev extends any[] = [],
+  Current extends any[] = [1]
+> = Length<Index> extends T
+  ? Length<Current>
+  : Fibonacci<T, [...Index, 1], Current, [...Prev, ...Current]>;
+```
+
+## AllCombinations
+
+## Greater Than（*）
+```ts
+// your answer -> 大数会报错
+type GreaterThan<T extends number, U extends number, A extends any[] = [], B extends any[] = []> = 
+  A['length'] extends T 
+    ? false
+    : B['length'] extends U 
+      ? true 
+      : GreaterThan<T, U, [...A, 1], [...B, 1]>;
+```
+
+解法一：利用MinusOne => 不停的减一，直到T和U相等
+```ts
+type ParseInt<T> = T extends `${infer X extends number}` ? X :  never
+
+type RemoveLeadingZeros<T extends string> = T extends '0' ? T : (
+  T extends `${0}${infer Rest}` ? RemoveLeadingZeros<Rest> : T
+)
+
+type InnerMinusOne<T extends string> = T extends `${infer X extends number}${infer Y}` ? (
+  X extends 0 ? `9${InnerMinusOne<Y>}` : `${[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8][X]}${Y}`
+) : ''
+
+type Reverse<T extends string> = T extends `${infer X}${infer Y}` ? `${Reverse<Y>}${X}` : ''
+
+type MinusOne<T extends number> = ParseInt<RemoveLeadingZeros<Reverse<InnerMinusOne<Reverse<`${T}`>>>>>
+
+type InnerGreaterThan<T extends number, U extends number> = T extends U ? true : (
+  T extends 0 ? false : InnerGreaterThan<MinusOne<T>, U>
+)
+
+type GreaterThan<T extends number, U extends number> = T extends U ? false : (
+  U extends 0 ? true : InnerGreaterThan<T, U>
+)
+```
+
+解法二：利用字符比较
+```ts
+// 把数字转为字符数组
+type SplitString<S extends string> = S extends `${infer D}${infer Rest}`
+  ? [D, ...SplitString<Rest>]
+  : [];
+
+// 比较两个数字字符大小
+type DigitGreaterThan<A extends string, B extends string> = 
+  A extends '0' ? (B extends '0' ? false : false) :
+  A extends '1' ? (B extends '0' ? true : B extends '1' ? false : false) :
+  A extends '2' ? (B extends '0' | '1' ? true : B extends '2' ? false : false) :
+  A extends '3' ? (B extends '0' | '1' | '2' ? true : B extends '3' ? false : false) :
+  A extends '4' ? (B extends '0' | '1' | '2' | '3' ? true : B extends '4' ? false : false) :
+  A extends '5' ? (B extends '0' | '1' | '2' | '3' | '4' ? true : B extends '5' ? false : false) :
+  A extends '6' ? (B extends '0' | '1' | '2' | '3' | '4' | '5' ? true : B extends '6' ? false : false) :
+  A extends '7' ? (B extends '0' | '1' | '2' | '3' | '4' | '5' | '6' ? true : B extends '7' ? false : false) :
+  A extends '8' ? (B extends '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' ? true : B extends '8' ? false : false) :
+  A extends '9' ? (B extends '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' ? true : B extends '9' ? false : false) :
+  never;
+
+// 1.如果T的长度大于U的长度，返回true
+// 2.如果T的长度小于U的长度，返回false
+// 3.如果T的长度等于U的长度，比较T和U的每一位，如果T的每一位都大于U的每一位，返回true，否则返回false
+type CompareDigitArrays<
+  A extends string[],
+  B extends string[]
+> = 
+  A extends [infer ADigit extends string, ...infer ARest extends string[]]
+    ? B extends [infer BDigit extends string,...infer BRest extends string[]]
+      ? DigitGreaterThan<ADigit, BDigit> extends true
+        ? true // A高位大于B高位
+        : DigitGreaterThan<ADigit, BDigit> extends false // A高位等于B高位
+         ? CompareDigitArrays<ARest, BRest>
+         : false // A高位小于B高位
+      : false
+      : true // A is longer than B
+    : false // B is longer than A
+
+type GreaterThan<A extends number, B extends number> = CompareDigitArrays<
+  SplitString<`${A}`>,
+  SplitString<`${B}`>
+>;
+```
+
+## Zip
+```ts
+// your answer
+type Zip<T extends any[], U extends any[]> =
+  T extends [infer R,...infer Rest]? U extends [infer R1,...infer Rest1]? [[R,R1],...Zip<Rest, Rest1>] : [] : []
+```
+
+```ts
+// 另一种解法（利用GreaterThan)
+type ArrayWithLength<T extends number, U extends any[] = []> = U['length'] extends T ? U : ArrayWithLength<T, [true, ...U]>;
+type GreaterThan<T extends number, U extends number> = ArrayWithLength<U> extends [...ArrayWithLength<T>, ...infer _] ? false : true;
+type Zip<T extends any[], U extends any[]> = GreaterThan<T['length'], U['length']> extends false ? {
+  [key in keyof T]: key extends keyof U ? [T[key], U[key]] : never
+} : {
+  [key in keyof U]: key extends keyof T ? [T[key], U[key]] : never
+}
+```
+
+## IsTuple
+```ts
+type IsTuple<T> = 
+  [T] extends [never] ? false :
+    T extends [] ? true:
+      T extends readonly [any, ...any] ? true : false
+```
+
+```ts
+// better answer => tuple的length是固定的
+type IsTuple<T> = 
+  [T] extends [never] ? false :
+    T extends readonly any[]
+      ? number extends T['length'] ? false : true
+      : false
 ```
