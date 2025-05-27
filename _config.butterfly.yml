@@ -1,12 +1,13 @@
 # Main menu navigation (導航目錄)
 # see https://butterfly.js.org/posts/4aa8abbe/#導航菜單
 # --------------------------------------
-
+## 图标https://fontawesome.com/
 menu:
   首页: / || fas fa-home
   标签: /tags/ || fas fa-tags
   归档: /archives/ || fas fa-archive
   分类: /categories/ || fas fa-folder-open
+  笔记: https://duanlvxin.github.io/notebook/ || fas fa-swatchbook || _blank
 
 # Code Blocks (代碼相關)
 # --------------------------------------
