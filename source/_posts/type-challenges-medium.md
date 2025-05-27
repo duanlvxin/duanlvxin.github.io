@@ -418,6 +418,7 @@ type RemoveIndexSignature<T, P = PropertyKey> = {
 
 ## Percentage Parser
 ```ts
+TODO
 ```
 
 ## Drop Char
@@ -436,7 +437,8 @@ type DropChar<S, C extends string> = S extends `${infer L}${C}${infer R}` ? Drop
 ```
 
 ## MinusOne（*）
-```
+```ts
+TODO
 ```
 
 ## PickByType
@@ -692,6 +694,9 @@ type Fibonacci<
 ```
 
 ## AllCombinations
+```ts
+TODO
+```
 
 ## Greater Than（*）
 ```ts
@@ -807,4 +812,59 @@ type IsTuple<T> =
     T extends readonly any[]
       ? number extends T['length'] ? false : true
       : false
+```
+
+## Chunk
+```ts
+// 取出前N个
+type PopN<T extends any[], N, Count extends any[] = []> = 
+  Count['length'] extends N ? [] : T extends [infer R, ...infer Rest] ? [R, ...PopN<Rest,N,[...Count,1]>] : []
+
+// 去除前N个后的剩余部分
+type RestN<T extends any[], N, Count extends any[] = []> =
+ Count['length'] extends N ? T : T extends [infer R, ...infer Rest] ? RestN<Rest, N, [...Count, 1]> : []
+
+// 从T里取出0...N的数组
+// chunk剩余部分
+type Chunk<T extends any[], N extends number> = 
+  T extends [] ? [] : [PopN<T, N>, ...Chunk<RestN<T, N>, N>]
+```
+
+## Fill
+```ts
+type Fill<
+  T extends unknown[],
+  N,
+  Start extends number = 0,
+  End extends number = T['length']
+> = 
+  End extends Start
+    ? T
+    : T extends [infer R, ...infer Rest]
+      ? Start extends 0
+        ? [N, ...Fill<Rest, N, 0, MinusOne<End>>]
+        : [R, ...Fill<Rest, N, MinusOne<Start>, MinusOne<End>]
+      : []
+```
+
+```ts
+// 利用辅助数组和标志位
+// Count['length']视为当前指针
+// 当Count['length']一直小于start时，也就是标志位为false,不进行替换，之后增加Count['length'](指针右移)
+// 当Count['length']等于start时，也就是标志位为true, 进行替换，之后增加Count['length']（指针右移）,
+// 同时，之后的都要进行替换，直到Count['length']等于end
+type Fill<
+  T extends unknown[],
+  N,
+  Start extends number = 0,
+  End extends number = T['length'],
+  Count extends any[] = [],
+  Flag extends boolean = Count['length'] extends Start ? true : false
+> = Count['length'] extends End
+  ? T
+  : T extends [infer R, ...infer U]
+    ? Flag extends false
+      ? [R, ...Fill<U, N, Start, End, [...Count, 0]>]
+      : [N, ...Fill<U, N, Start, End, [...Count, 0], Flag>]
+    : T
 ```
