@@ -868,3 +868,95 @@ type Fill<
       : [N, ...Fill<U, N, Start, End, [...Count, 0], Flag>]
     : T
 ```
+
+## Without
+```ts
+// your answer
+type Without<T, U> = 
+  T extends [infer R, ...infer Rest]
+    ? U extends any[]
+      ? R extends U[number] ? Without<Rest, U> : [R,...Without<Rest, U>]
+      : R extends U ? Without<Rest, U> : [R,...Without<Rest, U>]
+    : T
+```
+
+```ts
+// better answer
+type ToUnion<T> = T extends any[] ? T[number] : T
+type Without<T, U> = 
+  T extends [infer R, ...infer F]
+    ? R extends ToUnion<U>
+      ? Without<F, U>
+      : [R, ...Without<F, U>]
+    : T
+```
+
+## Trunc
+```ts
+type Trunc<T extends number | string> = 
+  `${T}` extends `${infer R}.${any}`
+    ? R extends '' | '+' | '-' ? `${R}0` : `${R}`
+    : `${T}`
+```
+
+## IndexOf
+```ts
+type IndexOf<T extends any[], U, Count extends any[] = []> =
+  T extends [infer R,...infer Rest]
+   ? Equal<R, U> extends true
+    ? Count['length']
+     : IndexOf<Rest, U, [...Count, 1]>
+    : -1
+```
+
+## Join
+```ts
+// your answer
+type Shift<T extends any[]> = T extends [infer R, ...any[]] ? R : never
+type Join<T extends string[], U extends string | number = ','> =
+  T['length'] extends 0 ? '' :
+    T['length'] extends 1 ? Shift<T> :
+      T extends [infer R extends string, ...infer Rest extends any[]] ? `${R}${U}${Join<Rest, U>}` : ''
+```
+
+```ts
+// better answer
+type Join<T extends any[], U extends string | number = ','> =
+  T extends [infer R,...infer Rest]
+    ? Rest['length'] extends 0
+      ? `${R & string}`
+      : `${R & string}${U}${Join<Rest, U>}`
+    : ''
+
+type Join<T extends any[], U extends string | number=','> =
+  T extends [infer F, ...infer R]
+    ? R['length'] extends 0
+      ? `${F & string}`
+      : `${F & string}${U}${Join<R, U>}`
+    : ''
+```
+
+## LastIndexOf
+```ts
+// your answer
+// 取出前N个后剩余的部分
+type RestN<T extends any[], N extends number = 1, Count extends any[] = []> =
+ Count['length'] extends N ? T : T extends [infer R, ...infer Rest] ? RestN<Rest, N, [...Count, 1]> : []
+
+type LastIndexOf<T extends any[], U, Count extends any[] = RestN<T>> =
+  T extends [...infer Rest, infer R]
+   ? Equal<R, U> extends true
+     ? Count['length']
+      : LastIndexOf<Rest, U, RestN<Count>>
+    : -1
+```
+
+```ts
+// better answer
+type LastIndexOf<T extends any[], U> = 
+  T extends [...infer I, infer L]
+    ? L extends U
+      ? I['length']
+      : LastIndexOf<I, U>
+    : -1;
+```
