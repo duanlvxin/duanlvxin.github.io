@@ -960,3 +960,127 @@ type LastIndexOf<T extends any[], U> =
       : LastIndexOf<I, U>
     : -1;
 ```
+
+## Unique
+```ts
+type In<T extends any[], N> =
+  T extends [infer R, ...infer Rest]
+    ? Equal<R,N> extends true ? true : In<Rest, N>
+    : false
+
+type Unique<T extends any[]> = 
+  T extends [...infer Rest, infer R]
+    ? In<Rest, R> extends true ? Unique<Rest> : [...Unique<Rest>, R]
+    : T
+```
+
+## MapTypes（精确*）
+```ts
+// your answer -- 当R是联合类型的时候有问题
+type MapTypes<T, R extends {mapFrom: any, mapTo: any}> = {
+  [key in keyof T]: T[key] extends R['mapFrom'] ? R['mapTo'] : T[key]
+}
+```
+
+```ts
+// correct answer
+type MapTypes<T, R extends {mapFrom: any, mapTo: any}> = {
+  [key in keyof T]: T[key] extends R['mapFrom']
+    ? R extends { mapFrom: T[key] }
+      ? R['mapTo']
+      : never
+    : T[key]
+}
+```
+
+## ConstructTuple
+```ts
+type ConstructTuple<L extends number, Count extends any[] = []> = 
+  L extends 0 ? [] :
+    Count['length'] extends L ? Count : ConstructTuple<L, [...Count, unknown]>
+```
+
+关于大数的解法：https://github.com/type-challenges/type-challenges/issues/14153（可以了解了解）
+
+## NumberRange
+```ts
+type ToUnion<T extends any[]> = T[number]
+type NumberRangeArr<L extends number, H extends number, Count extends any[] = []> = 
+  H extends L ? [...Count, H] : NumberRangeArr<L, MinusOne<H>, [...Count, H]>
+type NumberRange<L extends number, H extends number> = ToUnion<NumberRangeArr<L,H>>
+```
+
+```ts
+// better answer
+// 根据 Flag 来判断是否开始插入 Res，如果不可以就说明还没到开始的点，继续计数，一旦开始插入，最终的结果就是在 H 的位置返回 Res
+type NumberRange<L, H, Count extends any[] = [], Res extends any[] = [] , Flag extends boolean = Count['length'] extends L ? true : false> = 
+  Flag extends true
+    ? Count['length'] extends H
+      ? [...Res, Count['length']][number]
+      : NumberRange<L, H, [...Count, ''], [...Res,  Count['length']], Flag>
+    : NumberRange<L, H, [...Count, '']>
+```
+
+## Combination (*)
+
+题目：给定字符串数组，进行全排列和组合
+```ts
+// expected to be `"foo" | "bar" | "baz" | "foo bar" | "foo bar baz" | "foo baz" | "foo baz bar" | "bar foo" | "bar foo baz" | "bar baz" | "bar baz foo" | "baz foo" | "baz foo bar" | "baz bar" | "baz bar foo"`
+type Keys = Combination<['foo', 'bar', 'baz']>
+```
+
+```ts
+type Combination<T extends string[], All = T[number], Item = All>
+= Item extends string ? 
+    `${Item}` | `${Item} ${Combination<[], Exclude<All, Item>>}`
+    : never
+```
+
+// 这样写有问题（仅记录思路）, ['a', 'b', 'c'] => 会缺少a在中间的情况
+```ts
+type Combination<T extends string[]> = 
+  T extends [infer R,...infer Rest extends string[]]
+   ? R | `${R & string} ${Combination<Rest>}` | Combination<Rest> | `${Combination<Rest>} ${R & string}`
+    : never
+```
+
+## Sequence
+```ts
+// your answer
+type Subsequence<T extends any[]> = 
+  T extends [infer R, ...infer Rest]
+    ? [R] | Subsequence<Rest> | [R, ...Subsequence<Rest>]
+    : []
+```
+
+```ts
+// better answer
+type Subsequence<T extends any[]> = 
+  T extends [infer R, ...infer Rest]
+    ? Subsequence<Rest> | [R, ...Subsequence<Rest>]
+    : []
+```
+
+## Check Repeated Chars
+```ts
+// your answer
+type StringToArray<S extends string> = S extends `${infer first}${infer Rest}` ? [first, ...StringToArray<Rest>] : [] 
+
+type In<T extends any[], N> =
+  T extends [infer R, ...infer Rest]
+    ? Equal<R,N> extends true ? true : In<Rest, N>
+    : false
+
+type CheckRepeatedChars<T extends string> = 
+  T extends `${infer R}${infer Rest}`
+    ? In<StringToArray<Rest>, R> extends true ? true : CheckRepeatedChars<Rest>
+    : false
+```
+
+```ts
+// better answer
+type CheckRepeatedChars<T extends string> =
+  T extends `${infer R}${infer Rest}`
+   ? Rest extends `${string}${R}${string}`? true : CheckRepeatedChars<Rest>
+    : false
+```
