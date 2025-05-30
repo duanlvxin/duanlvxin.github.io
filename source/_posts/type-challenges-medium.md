@@ -1084,3 +1084,153 @@ type CheckRepeatedChars<T extends string> =
    ? Rest extends `${string}${R}${string}`? true : CheckRepeatedChars<Rest>
     : false
 ```
+
+## FirstUniqueCharInde
+- 解法一
+
+```ts
+// your answer - 一种复杂的解法
+type StringToArray<S extends string> = S extends `${infer first}${infer Rest}` ? [first, ...StringToArray<Rest>] : [] 
+
+type IndexOf<T extends any[], U, Count extends any[] = []> =
+  T extends [infer R,...infer Rest]
+   ? Equal<R, U> extends true
+    ? Count['length']
+     : IndexOf<Rest, U, [...Count, 1]>
+    : -1
+
+type LastIndexOf<T extends any[], U> = 
+  T extends [...infer I, infer L]
+    ? L extends U
+      ? I['length']
+      : LastIndexOf<I, U>
+    : -1;
+
+
+// 取一个字符，如果lastIndexof和IndexOf相同，返回
+type FirstUniqueCharIndex<T extends string, Count extends any[] = [], Sub extends string = T> = 
+  Sub extends `${infer R}${infer Rest}`
+    ? LastIndexOf<StringToArray<T>, R> extends IndexOf<StringToArray<T>, R>
+      ? Count['length']
+      : FirstUniqueCharIndex<T, [...Count, 1], Rest>
+    : -1
+```
+
+- 解法二
+
+```ts
+// 如果字符是空，返回-1
+// 否则，取一个字符，如果前半段或者后半段都没有和他重复的，返回；否则，继续
+type FirstUniqueCharIndex<T extends string, Count extends any[] = [], Pre extends string=''> =
+  // 当前匹配字符是R
+  T extends `${Pre}${infer R}${infer Rest}`
+    // 判断后半段有没有重复的
+    ? Rest extends `${string}${R}${string}`
+      // 如果有，递归
+      ? FirstUniqueCharIndex<T, [...Count, 1], `${Pre}${R}`>
+      // 否则，看前半段有没有重复的
+      : Pre extends `${string}${R}${string}`
+        // 如果有，那么递归
+        ? FirstUniqueCharIndex<T, [...Count,1], `${Pre}${R}`>
+        // 否则，返回计数数组的长度
+        : Count['length']
+    : -1
+```
+
+- 解法三(*)
+
+```ts
+type FirstUniqueCharIndex<
+  T extends string,
+  U extends string[] = []
+> = T extends `${infer F}${infer R}`
+  // 判断F 在不在 U中存在相同的
+  ? F extends U[number]
+    // 如果在就把F添加进去，此时也相当于索引+1了
+    ? FirstUniqueCharIndex<R, [...U, F]>
+    // 如果不在，继续判断F在不在R中存在
+    : R extends `${string}${F}${string}`
+      ? FirstUniqueCharIndex<R, [...U, F]>
+      // 双重判断后都不在，就可以返回索引了
+      : U['length']
+  : -1
+```
+
+## ParseUrlParams
+```ts
+TODO 和Percentage Parser类似？
+```
+
+## GetMiddleElement
+```ts
+type GetMiddleElement<T extends any[]> = 
+  T extends [infer R]
+    ? [R]
+    : T extends [infer R, infer Q]
+      ? [R, Q]
+      : T extends [any,...infer Rest, any]
+        ? GetMiddleElement<Rest>
+        : []
+
+// 精简写法
+type GetMiddleElement<T extends any[]> = 
+  T['length'] extends 0 | 1 | 2?
+    T:
+    T extends [any,...infer M,any]?
+      GetMiddleElement<M>:never
+```
+
+
+```ts
+(GreaterThan是之前的题目)
+// 使用计数数组，表示指针从前往后移动的步数, 当前指针指向元素R
+// 如果是奇数数组，当计数数组长度和Rest length相同，返回[R]
+// 如果是偶数数组，当计数数组长度大于Rest length时，返回[R前一个, R]
+// 如何判断奇偶？数字末尾是1，3，5，7，9 就是奇数
+type IsOdd<N extends number> = `${N}` extends `${string}${1 | 3 | 5 | 7 | 9}` ? true : false
+type GetMiddleElement<T extends any[], After extends any[] = T, Count extends any[] = [], Pre extends any= ''> = 
+  After extends [infer R, ...infer Rest]
+    ? IsOdd<T['length']> extends true
+      ? Rest['length'] extends Count['length'] ? [R] : GetMiddleElement<T, Rest, [...Count, 1]>
+      : GreaterThan<Count['length'], Rest['length']> extends true ? [Pre, R] : GetMiddleElement<T, Rest, [...Count, 1], R>
+    : []
+```
+
+## Appear only once
+
+和FirstUniqueCharIndex逻辑类似
+
+```ts
+// 判断某个元素是否在数组中
+type In<T extends any[], N> =
+  T extends [infer R, ...infer Rest]
+    ? Equal<R,N> extends true ? true : In<Rest, N>
+    : false
+
+// 某个元素，如果前半数组和后半数组中都没有，放入；否则，不放入；使用Result统计结果
+type FindEles<T extends any[], Pre extends any[] = [], Result extends any[] = []> = 
+  // 当前匹配元素R
+  T extends [...Pre, infer R, ...infer Rest]
+    // 判断后半数组中有没有
+    ? In<Rest, R> extends false
+      // 后半数组中没有, 判断前半数组中有没有
+      ? In<Pre, R> extends false
+        // 前半数组也没有，放入，递归
+        ? FindEles<T, [...Pre, R], [...Result, R]>
+        // 前半数组有，不放入，递归
+        : FindEles<T, [...Pre, R], Result>
+      // 后半数组中有，不放入，递归
+      : FindEles<T, [...Pre, R], Result>
+    : Result
+```
+
+如果不考虑`[1,2,number,number]`这种情况：
+U用来保存结果，O用来存储计算过的数字
+```ts
+type FindEles<T extends any[], U extends any[] = [], O extends any[] = []> 
+= T extends [infer F, ...infer Rest]
+  ? F extends [...Rest, ...O][number]
+    ? FindEles<Rest, U, [...O, F]>
+    : FindEles<Rest, [...U, F], [...O, F]>
+  : U
+```
