@@ -1234,3 +1234,119 @@ type FindEles<T extends any[], U extends any[] = [], O extends any[] = []>
     : FindEles<Rest, [...U, F], [...O, F]>
   : U
 ```
+
+## CountElementNumberToObject
+```ts
+// 统计key在T中出现的次数
+type Count<T extends any[], key, C extends any[] = []> =
+  T extends [infer R, ...infer Rest]
+    ? key extends R ? Count<Rest, key, [...C, 1]> :
+      R extends any[] ? Count<[...R, ...Rest], key, C> : Count<Rest, key, C>
+    : C['length']
+
+// 把数组中所有的key放入一维数组
+type Key<T extends any[], Result extends any[] = []> =
+  T extends [infer R, ...infer Rest]
+    ? R extends any[] ? Key<[...R, ...Rest], Result> : Key<Rest, [R,...Result]>
+    : Result
+
+type CountElementNumberToObject<T extends any[]> =  {
+  [key in Key<T>[number]]: Count<T, key>
+}
+```
+
+## Interger
+- 解法一
+
+```ts
+type Integer<T extends number> = 
+  `${T}` extends `${string}.${string}` ? never :  `${number}` extends `${T}` ? never  : T
+```
+
+```ts
+type Integer<T extends string | number> = number extends T
+  ? never
+  : `${T}` extends `${string}.${string}`
+    ? never
+    : T
+```
+
+- 解法二
+
+```ts
+type Integer<T extends number> = `${T}` extends `${bigint}` ? T : never
+```
+
+## ToPrimitive(valueOf*)
+```ts
+// your answer
+type Type<K> =
+  K extends string ? string :
+    K extends number ? number :
+      K extends boolean ? boolean :
+        K extends symbol ? symbol :
+          K extends Function ? Function :
+              K extends object ? {
+                [key in keyof K]: Type<K[key]>
+              }
+              : never
+
+type ToPrimitive<T> = {
+  [key in keyof T]: Type<T[key]>
+}
+```
+
+```ts
+// better answer
+type ToPrimitive<T> = T extends object ? (
+  T extends (...args: never[]) => unknown ? Function : {
+    [Key in keyof T]: ToPrimitive<T[Key]>
+  }
+) : (
+  T extends { valueOf: () => infer P } ? P : T
+)
+```
+
+## DeepMutable
+```ts
+type Mutable<T> =
+  T extends object ? 
+    T extends Function
+      ? T:{ -readonly [key in keyof T]
+      : Mutable<T[key]> }
+  : T
+
+type DeepMutable<T extends object> = {
+  -readonly [key in keyof T]: Mutable<T[key]>
+}
+```
+
+## All
+```ts
+type All<T extends any[], U> = 
+  T extends [infer R,...infer Rest] ? 
+    Equal<R, U> extends true ? All<Rest, U> : false
+    : true
+```
+
+```ts
+// better answer
+type All<T extends any[], U> = Equal<T[number], U>;
+```
+
+## filters
+```ts
+type Filter<T extends any[], P, Result extends any[] = []> = 
+  T extends [infer R,...infer Rest] ? 
+    R extends P ?  Filter<Rest, P, [...Result, R]> : Filter<Rest, P, Result>
+    : Result
+```
+
+```ts
+type Filter<T extends unknown[], P> =
+T extends [infer F, ...infer R]
+  ? F extends P
+    ? [F, ...Filter<R, P>]
+    : Filter<R, P>
+  : [];
+```
