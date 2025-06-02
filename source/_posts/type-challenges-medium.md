@@ -1023,7 +1023,7 @@ type NumberRange<L, H, Count extends any[] = [], Res extends any[] = [] , Flag e
 
 ## Combination (*)
 
-题目：给定字符串数组，进行全排列和组合
+> 给定字符串数组，进行全排列和组合
 ```ts
 // expected to be `"foo" | "bar" | "baz" | "foo bar" | "foo bar baz" | "foo baz" | "foo baz bar" | "bar foo" | "bar foo baz" | "bar baz" | "bar baz foo" | "baz foo" | "baz foo bar" | "baz bar" | "baz bar foo"`
 type Keys = Combination<['foo', 'bar', 'baz']>
@@ -1312,13 +1312,23 @@ type ToPrimitive<T> = T extends object ? (
 type Mutable<T> =
   T extends object ? 
     T extends Function
-      ? T:{ -readonly [key in keyof T]
-      : Mutable<T[key]> }
+      ? T
+      : { -readonly [key in keyof T]: Mutable<T[key]> }
   : T
 
 type DeepMutable<T extends object> = {
   -readonly [key in keyof T]: Mutable<T[key]>
 }
+```
+
+```ts
+// better answer
+type DeepMutable<T extends Record<keyof any,any>> =
+  T extends (...args:any[])=>any?
+    T:
+    {
+      - readonly [K in keyof T]:DeepMutable<T[K]>
+    }
 ```
 
 ## All
@@ -1349,4 +1359,87 @@ T extends [infer F, ...infer R]
     ? [F, ...Filter<R, P>]
     : Filter<R, P>
   : [];
+```
+
+## FindAll
+
+> 给定一个模式字符串 P 和一个文本字符串 T，实现类型 FindAll<T, P>，该类型返回一个数组，其中包含文本字符串 T 中所有与模式字符串 P 匹配的索引（从 0 开始计数）。
+
+```ts
+type Rest1<T extends string> = T extends `${infer R}${infer Rest}` ? Rest : '' 
+
+type FindAll<T extends string, P extends string, Count extends any[] = [], Result extends any[] = []> = 
+  P extends '' ? Result:
+    T extends `${P}${any}`
+    // 这里递归的不是Rest，而是T去除了一个字符后的部分
+      ? FindAll<Rest1<T>, P, [...Count, 1], [...Result, Count['length']]>
+      : T extends `${string}${any}`
+        ? FindAll<Rest1<T>, P, [...Count, 1], Result>
+        : Result
+```
+
+## Combs(*)
+> 实现类型 Combs<T>. ['cmd', 'ctrl', 'opt', 'fn'] => 'cmd ctrl' | 'cmd opt' | 'cmd fn' | 'ctrl opt' | 'ctrl fn' | 'opt fn'
+
+```ts
+// 取这个/不取这个 =》`${F} ${R[number]}` | Combs<R>
+type Combs<T extends string[] = ModifierKeys> = 
+T extends [infer F extends string, ...infer R extends string[]]
+  ? `${F} ${R[number]}` | Combs<R>
+  : never;
+```
+
+## PermutationsOfTuple(*)
+
+> PermutationsOfTuple<[1, number, unknown]>
+// Should return:
+// | [1, number, unknown]
+// | [1, unknown, number]
+// | [number, 1, unknown]
+// | [unknown, 1, number]
+// | [number, unknown, 1]
+// | [unknown, number ,1]
+
+```ts
+// 取出地第N个 -> T[N]，放入
+// 然后排列剩下的，放入
+type PermutationsOfTuple<T extends unknown[], Prev extends unknown[] = []> =
+  T extends [infer First, ...infer Rest]
+    ? [First, ...PermutationsOfTuple<[...Prev, ...Rest]>] | (Rest extends [] ? never : PermutationsOfTuple<Rest, [...Prev, First]>)
+    : []
+```
+
+## Replace First
+
+> 实现类型 ReplaceFirst<T, S, R>，该类型将元组 T 中首次出现的 S 替换为 R。如果 T 中不存在这样的 S，则结果应为 T。
+
+```ts
+type ReplaceFirst<T extends readonly unknown[], S, R, Pre extends any[] = []> = 
+  T extends [infer First, ...infer Rest]
+    ? First extends S
+      ? [...Pre, R, ...Rest]
+      : ReplaceFirst<Rest, S, R, [...Pre, First]>
+  : Pre
+```
+
+```ts
+type ReplaceFirst<T extends readonly unknown[], S, R> =
+  T extends readonly [infer F, ...infer Rest]
+    ? F extends S
+      ? [R, ...Rest]
+      : [F, ...ReplaceFirst<Rest, S, R>]
+  : []
+```
+
+## Transpose
+> 矩阵的转置是一种运算，它将矩阵沿其对角线翻转；也就是说，通过生成另一个矩阵（通常用 A 
+T表示）来交换矩阵 A 的行和列的索引。
+```ts
+type Matrix = Transpose <[[1]]>; // expected to be [[1]]
+type Matrix1 = Transpose <[[1, 2], [3, 4]]>; // expected to be [[1, 3], [2, 4]]
+type Matrix2 = Transpose <[[1, 2, 3], [4, 5, 6]]>; // expected to be [[1, 4], [2, 5], [3, 6]]
+```
+
+```ts
+TODO
 ```
