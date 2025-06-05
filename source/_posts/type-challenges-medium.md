@@ -1440,6 +1440,28 @@ type Matrix1 = Transpose <[[1, 2], [3, 4]]>; // expected to be [[1, 3], [2, 4]]
 type Matrix2 = Transpose <[[1, 2, 3], [4, 5, 6]]>; // expected to be [[1, 4], [2, 5], [3, 6]]
 ```
 
+## JSON Scheme to typescript
 ```ts
-TODO
+TODO 题目没太看懂
+```
+
+## Square
+```ts
+// 借助数组length -》 大数的时候有问题
+type toArray<N extends number, Result extends any[] = []> = 
+  N extends Result['length'] ? Result : toArray<N, [...Result, 1]>
+  
+// 辅助类型，将字符串转换为数字
+type ParseInt<T extends string> = T extends `${infer N extends number}` ? N : never
+
+// 转为大于等于0的数
+type Absolute<T extends number | string | bigint> = 
+  `${T}` extends `-${infer R}` ? ParseInt<`${R}`> : ParseInt<`${T}`>
+
+type Square<N extends number, M extends number = Absolute<N>, Result extends any[] = [], Count extends any[]=[]> = 
+  M extends Count['length'] ? Result['length'] : Square<N, M, [...Result, ...toArray<M>], [...Count, 1]>
+```
+
+```ts
+TODO 处理大数的情况
 ```
