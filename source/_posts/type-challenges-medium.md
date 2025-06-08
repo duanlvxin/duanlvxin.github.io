@@ -1465,3 +1465,212 @@ type Square<N extends number, M extends number = Absolute<N>, Result extends any
 ```ts
 TODO 处理大数的情况
 ```
+
+## Triangular
+```ts
+TODO
+```
+
+## CartesianProduct
+> 笛卡尔积
+
+```ts
+CartesianProduct<1 | 2, 'a' | 'b'> 
+// [1, 'a'] | [2, 'a'] | [1, 'b'] | [2, 'b']
+```
+
+```ts
+type CartesianProduct<T, U, T1 = T, U1 = U> =
+  T1 extends T ? U1 extends U ? [T1, U1] : never : never 
+```
+
+## Merge All
+> 合并所有的类型
+
+```ts
+type Foo = { a: 1; b: 2 }
+type Bar = { a: 2 }
+type Baz = { c: 3 }
+
+type Result = MergeAll<[Foo, Bar, Baz]> // expected to be { a: 1 | 2; b: 2; c: 3 }
+```
+
+```ts
+type Merge<A extends any = {}, B extends any = {}> = {
+  [key in (keyof A | keyof B)]: key extends keyof A ? key extends keyof B ? A[key] | B[key] : A[key] : key extends keyof B ? B[key] : never
+}
+
+type MergeAll<T extends any[], Result extends any = {}> =
+  T extends [infer R, ...infer Rest]
+   ? MergeAll<Rest, Merge<R, Result>>
+    : Result
+```
+
+## CheckRepeatedTuple
+// 从第一个开始，判断后面是否有和它重复的
+```ts
+type In<T extends any[], N> =
+  T extends [infer R, ...infer Rest]
+    ? Equal<R,N> extends true ? true : In<Rest, N>
+    : false
+
+type CheckRepeatedTuple<T extends unknown[]> = 
+  T extends [infer R, ...infer Rest]
+    ? In<Rest, R> extends true ? true : CheckRepeatedTuple<Rest>
+    : false
+```
+
+// 另一种解法，利用`Extract`, `R[number]`
+// `type Extract<T, U> = T extends U ? T : never;`
+```ts
+type IsEqual<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B
+  ? 1
+  : 2
+  ? true
+  : false;
+
+type CheckRepeatedTuple<T extends unknown[]> = T extends [
+  infer Item,
+  ...infer R
+]
+  ? R extends []
+    ? false
+    : Item extends R[number]
+    ? IsEqual<Extract<R[number], Item>, Item> extends true
+      ? true
+      : CheckRepeatedTuple<R>
+    : CheckRepeatedTuple<R>
+  : false;
+```
+
+## PublicKey
+```ts
+type PublicType<T extends object> = {
+  [key in keyof T as key extends `_${string}` ? never : key] : T[key]
+}
+```
+
+## ExtractToObject
+
+> 实现一个将prop对象提取到接口的类型。该类型接受两个参数。
+
+```ts
+type Test = { id: '1', myProp: { foo: '2' }}
+type Result = ExtractToObject<Test, 'myProp'> // expected to be { id: '1', foo: '2' }
+```
+
+```ts
+// your answer
+type IntersectionToObj<T> = {
+  [K in keyof T]: T[K]
+}
+
+type ExtractToObject<T, U extends keyof T> = IntersectionToObj<{
+  [key in keyof T as key extends U ? never : key] : T[key]
+} & {
+  [key in keyof T[U]] : T[U][key]
+}>
+```
+
+```ts
+// better answer
+type ExtractToObject<T extends Record<string, any>, U extends string> = 
+  { [K in (keyof Omit<T, U> | keyof T[U])]: K extends keyof T ? T[K] : T[U][K] }
+
+// better answer2
+type ExtractToObject<T, P extends keyof T> = Omit<Omit<T, P> & T[P], never>
+```
+
+## DeepOmit
+```ts
+TODO
+```
+
+## IsOdd
+```ts
+type IsOdd<T extends number> = 
+  `${T}` extends `${string}${'.' | 'e'}${string}`
+    ? false
+    : `${T}` extends `${string}${1 | 3 | 5 | 7 | 9}`
+      ? true
+      : false
+```
+
+
+> type b = `${3e0}` extends `${string}${'.' | 'e'}${string}` ? true : false 为什么这个是false?
+> 在 TypeScript 里，模板字符串类型在处理数值时会先将数值转换为字符串，而 3e0 是科学计数法表示的数值，它等价于 3。当把 3e0 转换为字符串时，结果是 "3"，并非 "3e0"。下面来分析 type b = ${3e0}extends${string}${'.' | 'e'}${string} ? true : false 这个类型定义：
+左侧 ${3e0} 会被转换为字符串 "3"。
+右侧 ${string}${'.' | 'e'}${string} 表示字符串中至少包含一个 . 或者 e。
+由于 "3" 这个字符串里既没有 . 也没有 e，所以 "3" 不满足 ${string}${'.' | 'e'}${string} 这个模式，因此整个条件判断结果为 false。
+
+
+## Hanoi
+
+> 汉诺塔
+
+- 利用MinusOne
+
+```ts
+// 把上面n-1个从A利用B移到c, 最底下的那个从A移到B, 然后把在C的n-1个利用A移到B
+type Hanoi<N extends number, From = 'A', To = 'B', Intermediate = 'C'> = 
+  N extends 0 ? []:
+    [...Hanoi<MinusOne<N>,From, Intermediate, To>, [From, To], ...Hanoi<MinusOne<N>,Intermediate, To, From>]
+```
+
+- 利用计数数组
+
+```ts
+type Hanoi<
+  N extends number,
+  From = "A",
+  To = "B",
+  Intermediate = "C",
+  CurrentIndex extends 1[] = []
+> = CurrentIndex["length"] extends N
+  ? []
+  : [
+      ...Hanoi<N, From, Intermediate, To, [...CurrentIndex, 1]>,
+      [From, To],
+      ...Hanoi<N, Intermediate, To, From, [...CurrentIndex, 1]>
+    ]
+
+```
+
+## Pascal's triangle
+> 帕斯卡三角形（杨辉三角）
+
+```ts
+TODO
+```
+
+## IsFixedStringLiteralType
+
+```ts
+TODO
+```
+
+## CompareArrayLength
+```ts
+// your answer 利用辅助数组，谁先到length谁大
+type CompareArrayLength<T extends any[], U extends any[], T1 extends any[] = [], U1 extends any[] = []> =
+  T1['length'] extends T['length']
+    ? U1['length'] extends U['length']
+      ? 0
+      : -1
+    : U1['length'] extends U['length']
+      ? 1
+      : CompareArrayLength<T,U,[...T1, 1], [...U1, 1]>
+```
+
+```ts
+// better answer 利用length 和 keyof T
+type CompareArrayLength<T extends unknown[], U extends unknown[]> = T['length'] extends U['length']
+  ? 0
+  : `${U['length']}` extends keyof T ? 1 : -1;
+```
+
+```ts
+// better answer 利用keyof T
+type CompareArrayLength<T extends unknown[], U extends unknown[]>
+  = keyof T extends keyof U ? keyof U extends keyof T ? 0 : -1 : 1
+```
