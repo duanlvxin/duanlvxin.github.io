@@ -1674,3 +1674,84 @@ type CompareArrayLength<T extends unknown[], U extends unknown[]> = T['length'] 
 type CompareArrayLength<T extends unknown[], U extends unknown[]>
   = keyof T extends keyof U ? keyof U extends keyof T ? 0 : -1 : 1
 ```
+
+## Defined Partial Record
+
+// 类似Combination
+```ts
+type 
+```
+
+## Loggest Common Prefix）
+```ts
+// 空数组，返回''
+// 长度为1，返回第一个字符
+// 长度为n, 返回第一个字符和剩下所有字符的最长公共部分之间的最长公共
+type LongestCommonPrefix<T extends string[]> =
+  T extends [infer R extends string, ...infer Rest extends string[]]
+    ? Rest extends []
+      ? R
+      : Common<R, LongestCommonPrefix<Rest>>
+    : ''
+
+type StringToArray<S extends string> = S extends `${infer first}${infer Rest}` ? [first, ...StringToArray<Rest>] : [] 
+
+type CompareArrayLength<T extends unknown[], U extends unknown[]> = T['length'] extends U['length']
+  ? 0
+  : `${U['length']}` extends keyof T ? 1 : -1;
+
+type CompareStringLength<S1 extends string, S2 extends string> = CompareArrayLength<StringToArray<S1>,StringToArray<S2>>
+
+type Common<S1 extends string, S2 extends string, Result extends string= ''> = 
+  S1 extends `${infer R1}${infer Rest1}`
+    ? S2 extends `${infer R2}${infer Rest2}`
+      ? R1 extends R2
+        ? Common<Rest1, Rest2, `${Result}${R1}`>
+        : CompareStringLength<Common<Rest1, S2, Result>, Common<Rest2, S1, Result>> extends 1
+          ? Common<Rest1, S2, Result>
+          : Common<Rest2, S1, Result>
+      : Result
+    : Result
+```
+
+```ts
+TODO check solution
+```
+
+## Trace
+```ts
+// 取T的对角线元素
+// length 1: T[0][0]
+// length 2: T[0][0] | T[1][1]
+// length 3: T[0][0] | T[1][1] | T[2][2]
+type Trace<T extends any[][], Count extends any[] = []> = 
+  T['length'] extends Count['length']
+    ? never
+    : T[Count['length']][Count['length']] | Trace<T, [...Count,1]>
+```
+
+```ts
+// better answer
+type Trace<T extends any[][]> = {[P in keyof T]: T[P][P & keyof T[P]]}[number]
+```
+
+## IsAlphabet(Uppercase和Lowercase)
+// Uppercase和Lowercase
+```ts
+// better answer
+type IsAlphabet<S extends string> = Uppercase<S> extends Lowercase<S> ? false : true
+```
+
+// 利用Record（了解即可，为什么能生效？TODO）
+```ts
+type IsAlphabet<S extends string> = (
+  & Record<`${any}${S & `${any}${any}`}${any}`, true>
+  & Record<string, false>
+)['ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'];
+```
+
+## MyUppercase
+```ts
+TODO
+type MyUppercase<S extends string> = Uppercase<S>
+```
