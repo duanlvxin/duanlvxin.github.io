@@ -1715,7 +1715,12 @@ type Common<S1 extends string, S2 extends string, Result extends string= ''> =
 ```
 
 ```ts
-TODO check solution
+type LongestCommonPrefix<T extends string[], P extends string = ''> =
+  T extends [`${P}${infer Next}${any}`, ...any]
+    ? T extends `${P}${Next}${any}`[]
+      ? LongestCommonPrefix<T, `${P}${Next}`>
+      : P // the longest
+    : P   // T is empty or end of T[0]
 ```
 
 ## Trace
@@ -1752,6 +1757,19 @@ type IsAlphabet<S extends string> = (
 
 ## MyUppercase
 ```ts
-TODO
-type MyUppercase<S extends string> = Uppercase<S>
+type LetterMap = {
+  'a': 'A', 'b': 'B', 'c': 'C', 'd': 'D', 'e': 'E', 'f': 'F', 'g': 'G',
+  'h': 'H', 'i': 'I', 'j': 'J', 'k': 'K', 'l': 'L', 'm': 'M', 'n': 'N',
+  'o': 'O', 'p': 'P', 'q': 'Q', 'r': 'R', 's': 'S', 't': 'T',
+  'u': 'U', 'v': 'V', 'w': 'W', 'x': 'X', 'y': 'Y', 'z': 'Z'
+}
+
+type LowercaseLetters = keyof LetterMap;
+
+type MyUppercase<T extends string> = 
+  T extends `${infer First}${infer Rest}` 
+    ? First extends LowercaseLetters
+      ? `${LetterMap[First]}${Uppercase<Rest>}`
+      : `${First}${Uppercase<Rest>}`
+    : T;
 ```
