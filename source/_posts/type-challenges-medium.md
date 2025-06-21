@@ -60,6 +60,25 @@ type TupleToUnion<T extends unknown[]> = T[number]
 
 ## Chainable Options
 ```ts
+declare const config: Chainable
+
+const result = config
+  .option('foo', 123)
+  .option('name', 'type-challenges')
+  .option('bar', { value: 'Hello World' })
+  .get()
+
+// expect the type of result to be:
+interface Result {
+  foo: number
+  name: string
+  bar: {
+    value: string
+  }
+}
+```
+
+```ts
 // 正解
 type Chainable<R = object> = {
   option<K extends  string, V>(
@@ -243,6 +262,10 @@ type Merge<F, S> = {
 ```
 
 ## KebabCase
+```txt
+FooBarBaz -> foo-bar-baz
+```
+
 ```ts
 // your answer
 type IsUpperCase<S extends string> = 
@@ -311,6 +334,7 @@ type IsUnion<T> = IsUnionImpl<T>;
 ```
 
 ```js
+// 解析：
 IsUnion<string>
 => IsUnionImpl<string, string>
 => (string extends string ? string extends string ? true : unknown : never) extends true ? false : true
@@ -418,7 +442,59 @@ type RemoveIndexSignature<T, P = PropertyKey> = {
 
 ## Percentage Parser
 ```ts
-TODO
+// your answer
+type NumberLetter = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+type StringToArray<S extends string> = S extends `${infer first}${infer Rest}` ? [first, ...StringToArray<Rest>] : [] 
+type LengthOfString<S extends string> = StringToArray<S>["length"]
+
+// 前提：结果放在Result数组中, Count数组长度用来记录当前字符下标+1
+// 如果是空字符串，返回['', '', '']
+// 如果只有一个字符，那么根据这个字符去判断返回；
+// 否则，执行下面的步骤：
+// 第一个字符如果是'+' | '-', 那么Result=>[第一个字符, '']
+//    否则，如果是数字，那么Result=>['', 第一个字符]
+//    否则，都不是的话，不满足正则，返回[]
+// 第二个字符，如果非最后一个字符，且是数字，那么Result[1]里的字符要加上这个字符；
+//    如果非最后一个字符，不是数字，那么不满足正则，返回[]
+// 依次判断，直到最后一个字符，如果是数字，Result[1]里的字符加上这个字符，Result[2]里是空，如果是%, Result[2]里放百分号；
+// 否则，不满足正则，返回[]
+type PercentageParser<A extends string, Result extends string[] = [], Count extends number[] = [1], Len = LengthOfString<A>> =
+  A extends `${infer R}${infer Rest}`
+    ? 
+      // 如果只有一个字符
+      Len extends 1 ? 
+        R extends '%' ? ['', '', '%'] :
+        R extends '+' | '-' | '' ? [R, '', '']:
+        R extends NumberLetter ? ['', R, '']: []:
+      // 第一个字符
+      Count['length'] extends 1
+        ?
+          R extends '+' | '-'
+            ? PercentageParser<Rest, [R, ''], [...Count, 1], Len>
+            : R extends NumberLetter
+              ? PercentageParser<Rest, ['', R], [...Count, 1], Len>
+              : []
+        : 
+          // 是否是最后一个字符
+          Count['length'] extends Len
+            // 最后一个字符
+            ? R extends NumberLetter
+              ? [Result[0], `${Result[1]}${R}`, '']
+              : R extends '%'
+                ? [Result[0], Result[1], '%']
+                : []
+            // 非第一个字符，也非最后一个字符
+            : R extends NumberLetter
+              ? PercentageParser<Rest, [Result[0], `${Result[1]}${R}`, ''], [...Count, 1], Len>
+              : []
+    : ['', '', '']
+```
+
+```ts
+// better answer
+type CheckPrefix<T> = T extends '+' | '-' ? T : never;
+type CheckSuffix<T> =  T extends `${infer P}%` ? [P, '%'] : [T, ''];
+type PercentageParser<A extends string> = A extends `${CheckPrefix<infer L>}${infer R}` ? [L, ...CheckSuffix<R>] : ['', ...CheckSuffix<A>];
 ```
 
 ## Drop Char
@@ -438,7 +514,26 @@ type DropChar<S, C extends string> = S extends `${infer L}${C}${infer R}` ? Drop
 
 ## MinusOne（*）
 ```ts
-TODO
+// 如果不考虑大数，利用数组length
+type Pop<A extends any[] = []> = A extends [...infer Rest, any] ? Rest : []
+type MinusOne<T extends number, A extends any[] = []> = 
+  A['length'] extends T ? Pop<A>['length'] : MinusOne<T, [...A, 1]>
+```
+
+```ts
+// 考虑大数的解法 TODO
+type ParseInt<T extends string> = T extends `${infer Digit extends number}` ? Digit : never
+type ReverseString<S extends string> = S extends `${infer First}${infer Rest}` ? `${ReverseString<Rest>}${First}` : ''
+type RemoveLeadingZeros<S extends string> = S extends '0' ? S : S extends `${'0'}${infer R}` ? RemoveLeadingZeros<R> : S
+type InternalMinusOne<
+  S extends string
+> = S extends `${infer Digit extends number}${infer Rest}` ?
+    Digit extends 0 ?
+      `9${InternalMinusOne<Rest>}` :
+    `${[9, 0, 1, 2, 3, 4, 5, 6, 7, 8][Digit]}${Rest}`:
+  never
+type MinusOne<T extends number> = ParseInt<RemoveLeadingZeros<ReverseString<InternalMinusOne<ReverseString<`${T}`>>>>>
+type test = MinusOne<9007199254740992>
 ```
 
 ## PickByType
@@ -693,9 +788,49 @@ type Fibonacci<
   : Fibonacci<T, [...Index, 1], Current, [...Prev, ...Current]>;
 ```
 
-## AllCombinations
+## AllCombinations(*)
 ```ts
-TODO
+// your answer
+// 转为数组，利用T[number]
+type StringToArray<S extends string> = S extends `${infer first}${infer Rest}` ? [first, ...StringToArray<Rest>] : [] 
+
+type AllCombinations<S extends string> = S extends '' ? '' : '' | Combination<StringToArray<S>>
+
+type Combination<T extends string[], All = T[number], Item = All>
+= Item extends string ? 
+    `${Item}` | `${Item}${Combination<[], Exclude<All, Item>>}`
+    : never
+```
+
+```ts
+// better answer
+// 条件类型
+type StringToUnion<S> = S extends `${infer F}${infer R}` ? F | StringToUnion<R> : S
+type AllCombinations<
+  S extends string,
+  T extends string = StringToUnion<S>,
+  U extends string = T,
+> = S extends `${infer F}${infer R}`
+  ? U extends U
+    ? `${U}${AllCombinations<R, U extends '' ? T : Exclude<T, U>>}`
+    : never
+  : ''
+```
+
+```ts
+// better answer
+// { [LiteralType in UnionType]: `${LiteralType}${...Rest Type...}`}[UnionType]
+type String2Union<S extends string> =
+  S extends `${infer C}${infer REST}`
+  ? C | String2Union<REST>
+  : never;
+
+type AllCombinations<
+  STR extends string,
+  S extends string = String2Union<STR>,
+> = [S] extends [never]
+  ? ''
+  : '' | {[K in S]: `${K}${AllCombinations<never, Exclude<S, K>>}`}[S];
 ```
 
 ## Greater Than（*）
@@ -1158,7 +1293,30 @@ type FirstUniqueCharIndex<
 
 ## ParseUrlParams
 ```ts
-TODO 和Percentage Parser类似？
+type getInner<S extends string, Result extends string= ''> =
+  S extends `${infer R}${infer Rest}`
+    ? R extends '/' ? Result 
+      : Rest extends '' ? `${Result}${R}`
+      : getInner<Rest, `${Result}${R}`>
+    : Result
+  
+// 如果是空字符串，返回never
+// 找到冒号开头的，一直往后直到为''或'/', 结果为该字符
+// 继续往后，如果还有 result | 'xxx'
+type ParseUrlParams<T, Result = never> = 
+  T extends `${infer R}${infer Rest}`
+    ? R extends ':'
+      ? ParseUrlParams<Rest, getInner<Rest>>
+      : Result | ParseUrlParams<Rest>
+    : never
+```
+
+```ts
+type ParseUrlParams<T> = T extends `${string}:${infer R}`
+  ? R extends `${infer P}/${infer L}`
+    ? P | ParseUrlParams<L>
+    : R
+  : never
 ```
 
 ## GetMiddleElement
@@ -1468,7 +1626,13 @@ TODO 处理大数的情况
 
 ## Triangular
 ```ts
-TODO
+// n*(n+1)/2
+// 利用数组length?
+// 一个数组用来存放最终结果->result['length']
+// 一个数组用来计数 Count['length'] extends N 结束
+// 每次把当前Count放入Result
+type Triangular<N extends number, Result extends any[] = [], Count extends any[] = []> = 
+  Count['length'] extends N ? Result['length'] : Triangular<N, [...Result, ...Count, 1], [...Count, 1]>
 ```
 
 ## CartesianProduct
@@ -1583,7 +1747,30 @@ type ExtractToObject<T, P extends keyof T> = Omit<Omit<T, P> & T[P], never>
 
 ## DeepOmit
 ```ts
-TODO
+type SplitDot<S extends string> = 
+  S extends `${infer P}.${infer R}`
+    ? [P, ...SplitDot<R>]
+    : [S]
+
+// K如果没有'点' 那就是Omit<T, k>
+// K如果有'点' '点'前后是A, B 那就是T[A] = Omit<T.A, B>
+type Shift<A extends any[] = []> = A extends [any, ...infer Rest] ? Rest : []
+
+type Join<A extends string[]> =
+  A extends [infer R extends string, ...infer Rest extends string[]] ? `${R}${Join<Rest> extends '' ? '' : `.${Join<Rest>}`}` : ''
+
+type DeepOmit<T extends object, K extends string, Keys extends any[]= SplitDot<K>> = 
+  Keys['length'] extends 1
+    ? Omit<T,K>
+    : {
+      [key in keyof T]: key extends Keys[0] ? DeepOmit<T[key], Join<Shift<Keys>>> : T[key]
+    }
+```
+
+```ts
+type DeepOmit<O, P extends string> = P extends `${infer K}.${infer Rest}` ? {
+  [key in keyof O]: key extends K ? DeepOmit<O[key], Rest> : O[key]
+} : Omit<O, P>
 ```
 
 ## IsOdd
@@ -1643,10 +1830,30 @@ type Hanoi<
 TODO
 ```
 
-## IsFixedStringLiteralType
+## IsFixedStringLiteralType（*）
+// TODO 为什么可以这样写？？
+```ts
+// S里的每个元素是 A-Z a-z?
+type IsFixedStringLiteralType<S extends string> = 
+  {} extends Record<S, 1> ? false : Equal<[S], S extends unknown ? [S] : never>
+```
 
 ```ts
-TODO
+type SingleCheck<S> = S extends ''
+  ? true
+  : S extends `${infer C}${infer T}`
+    ? '0' | '1' extends C
+      ? false
+      : SingleCheck<T>
+    : false;
+
+type IsFixedStringLiteralType<S extends string, T = S> = [S] extends [never]
+  ? false
+  : S extends unknown
+    ? [T] extends [S]
+      ? SingleCheck<S>
+      : false
+    : false;
 ```
 
 ## CompareArrayLength
@@ -1682,7 +1889,7 @@ type CompareArrayLength<T extends unknown[], U extends unknown[]>
 type 
 ```
 
-## Loggest Common Prefix）
+## Loggest Common Prefix
 ```ts
 // 空数组，返回''
 // 长度为1，返回第一个字符
