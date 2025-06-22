@@ -333,6 +333,14 @@ type IsUnionImpl<T, C extends T = T> = (T extends T ? C extends T ? true : unkno
 type IsUnion<T> = IsUnionImpl<T>;
 ```
 
+```ts
+// 更容易理解的一种写法
+// your answers
+type IsUnion<T> = 
+  [T] extends [never] ? false :
+    Equal<[T], T extends unknown ? [T]: never> extends true ? false : true
+```
+
 ```js
 // 解析：
 IsUnion<string>
@@ -1589,7 +1597,7 @@ type ReplaceFirst<T extends readonly unknown[], S, R> =
   : []
 ```
 
-## Transpose
+## Transpose(*)
 > 矩阵的转置是一种运算，它将矩阵沿其对角线翻转；也就是说，通过生成另一个矩阵（通常用 A 
 T表示）来交换矩阵 A 的行和列的索引。
 ```ts
@@ -1598,12 +1606,84 @@ type Matrix1 = Transpose <[[1, 2], [3, 4]]>; // expected to be [[1, 3], [2, 4]]
 type Matrix2 = Transpose <[[1, 2, 3], [4, 5, 6]]>; // expected to be [[1, 4], [2, 5], [3, 6]]
 ```
 
-## JSON Scheme to typescript
 ```ts
-TODO 题目没太看懂
+// 获取M中每个数组中的第N个
+// idxArr<[[1, 2], [3, 4]], 0> => [1, 3]
+// idxArr<[[1, 2], [3, 4]], 1> => [2, 4] 
+type idxArr<M extends number[][], N extends number = 0, Result extends any[] = []> = 
+  M extends [infer R extends any[], ...infer Rest extends any[][]]
+    ? idxArr<Rest, N, [...Result, R[N]]>
+    : Result
+
+
+// 如果是空数组，返回[]
+// result数组里第M个元素里的第N个元素，是原数组中的第N个元素的第M个
+type Transpose<M extends number[][], Count extends any[] = []> = 
+  Count['length'] extends M[0]['length'] ? [] : 
+    [idxArr<M, Count['length']>, ...Transpose<M, [...Count, 0]>]
 ```
 
-## Square
+```ts
+// better answer
+type Transpose<M extends number[][],R = M['length'] extends 0?[]:M[0]> = {
+  [X in keyof R]: {
+    [Y in keyof M]: X extends keyof M[Y] ? M[Y][X] : never
+  }
+}
+```
+
+## JSON Scheme to typescript(*)
+
+> 给定一个 JSON 模式，实现一个类型，该类型接受一个 JSON 字符串，并返回一个与该模式匹配的类型。
+
+```ts
+type Primitives = {
+  string: string;
+  number: number;
+  boolean: boolean;
+};
+
+type HandlePrimitives<T, Type extends keyof Primitives> = T extends {
+  enum: unknown[];
+}
+  ? T['enum'][number]
+  : Primitives[Type];
+
+type HandleObject<T> = T extends {
+  properties: infer Properties extends Record<string, unknown>;
+}
+  ? T extends { required: infer Required extends unknown[] }
+    ? Omit<
+        {
+          [K in Required[number] & keyof Properties]: JSONSchema2TS<
+            Properties[K]
+          >;
+        } & {
+          [K in Exclude<keyof Properties, Required[number]>]?: JSONSchema2TS<
+            Properties[K]
+          >;
+        },
+        never
+      >
+    : {
+        [K in keyof Properties]?: JSONSchema2TS<Properties[K]>;
+      }
+  : Record<string, unknown>;
+
+type HandleArray<T> = T extends { items: infer Items }
+  ? JSONSchema2TS<Items>[]
+  : unknown[];
+
+type JSONSchema2TS<T> = T extends { type: infer Type }
+  ? Type extends keyof Primitives
+    ? HandlePrimitives<T, Type>
+    : Type extends 'object'
+    ? HandleObject<T>
+    : HandleArray<T>
+  : never;
+```
+
+## Square(*)
 ```ts
 // 借助数组length -》 大数的时候有问题
 type toArray<N extends number, Result extends any[] = []> = 
@@ -1827,18 +1907,101 @@ type Hanoi<
 > 帕斯卡三角形（杨辉三角）
 
 ```ts
-TODO
+// 第1行 [1]
+// 第2行 [1,1]
+// 第3行 [1,2,1]
+// 第4行 [1,3,3,1]
+// 第5行 [1,4,6,4,1]
+// 从上一行，计算下一行的值
+
+// 利用数组length
+// 第一行 [[0]]
+// 第二行 [[0], [0]]
+// 第三行 [[0], [0, 0], [0]]
+
+// 获取数组最后一个元素
+type Last<A extends any[]> = A extends [...any[], infer R] ? R : never
+// 数组项两两拼接
+type Concat<A extends any[], Result extends any[] = []> = 
+  A extends [infer R extends any[], infer Q extends any[], ...infer Rest extends any[]]
+    ? Concat<[Q, ...Rest], [...Result, [...R, ...Q]]>
+    : Result
+
+// 从当前arr算下一行的arr
+// 这个数组第一项是[0], 最后一项是[0], 中间项是当前arr中最后一个数组相邻两个数组的拼接
+type NextLine<arr extends any[][] = [[0]]> =
+  arr['length'] extends 1 ? [[0], [0]] : [[0], ...Concat<arr>, [0]]
+
+type PascelTemp<N extends number, Result extends any[]= [[[0]]], Count extends any[] = [0]> = 
+  Count['length'] extends N ? Result : PascelTemp<N, [...Result, NextLine<Last<Result>>],[...Count, 0]>
+
+// type test = PascelTemp<2> // [[[0]], [[0], [0]]] => [[1], [1, 1]]
+// type test2 = PascelTemp<3> // [[[0]], [[0], [0]], [[0], [0,0], [0]]] => [[1],[1,1], [1,2,3]]
+
+type ComputeLength<arr extends any[][], Result extends any[] = []> =
+  arr extends [infer R extends any[], ...infer Rest extends any[]] ? ComputeLength<Rest, [...Result, R['length']]> : Result
+
+type PascelLength<arr extends any[][], Result extends any[] = []> = 
+  arr extends [infer R extends any[], ...infer Rest extends any[]] ? PascelLength<Rest, [...Result, ComputeLength<R>]> : Result
+
+type Pascal<N extends number> = PascelLength<PascelTemp<N>>
+```
+
+```ts
+// better answer
+// IdxNext<[[0]]> => [[0], [0]]
+// IdxNext<[[0], [0]]> => [[0], [0,0], [0]]
+type IdxNext<Arr extends 0[][] = [],  Head extends 0[][] = [[0]] > =
+  Arr extends [ infer A extends 0[], infer B extends 0[], ...infer Rest extends 0[][] ]
+    ? [ ...Head, [ ...A, ...B ], ...IdxNext<[B, ...Rest], []> ]
+    : Arr extends []
+      ? []
+      : [ ...Head, [0] ]
+
+// IdxNextByNumber<0> => [[0]]
+// IdxNextByNumber<1> => [[0], [0]]
+// IdxNextByNumber<2> => [[0], [0,0], [0]]
+type IdxNextByNumber<N extends number, Counter extends 0[] = [], Last extends 0[][] = [[0]]> =
+  N extends Counter['length']
+    ? Last
+    : IdxNextByNumber<N, [ ...Counter, 0 ], IdxNext<Last extends [] ? [[0]] : Last>>
+
+// IdxArr<0> => [1]
+// IdxArr<1> => [1, 1]
+// IdxArr<2> => [1,2,1]
+type IdxArr<N extends number, Arr = IdxNextByNumber<N>> =
+  Arr extends [ infer A extends 0[], ...infer Rest extends 0[][] ]
+    ? [ A['length'], ...IdxArr<0, Rest> ]
+    : []
+
+// [ IdxArr[0], IdxArr[1], ..., IdxArr[n-1] ]
+type Pascal<N extends number, Counter extends 0[] = []> =
+  N extends Counter['length']
+    ? []
+    : [ IdxArr<Counter['length']>, ...Pascal<N, [ ...Counter, 0 ]> ]
 ```
 
 ## IsFixedStringLiteralType（*）
-// TODO 为什么可以这样写？？
 ```ts
-// S里的每个元素是 A-Z a-z?
-type IsFixedStringLiteralType<S extends string> = 
-  {} extends Record<S, 1> ? false : Equal<[S], S extends unknown ? [S] : never>
+type a = `${boolean}` // 'false' | 'true'
+type b = `${string}` // string
+type c = `${null}` // 'null'
+type d = `${undefined}` // 'undefined'
+type e = `${bigint}` // `${bigint}`
 ```
 
 ```ts
+// 后半段的写法是处理联合类型的情况
+type IsFixedStringLiteralType<S extends string> = 
+  {} extends Record<S, 1> ? false : Equal<[S], S extends unknown ? [S] : never>
+
+// 也可以这样写：
+type IsFixedStringLiteralType<S extends string> = 
+  IsUnion<S> extends true ? false : {} extends Record<S, 1> ? false :  true
+```
+
+```ts
+// '0' | '1' extends C , 处理`${string}`
 type SingleCheck<S> = S extends ''
   ? true
   : S extends `${infer C}${infer T}`
