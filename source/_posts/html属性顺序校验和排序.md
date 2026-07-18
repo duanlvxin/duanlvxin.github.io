@@ -7,7 +7,6 @@ tags:
   - html
   - js
   - 算法
-cover: https://i0.hippopx.com/photos/282/563/731/code-website-html-web-preview.jpg
 ---
 
 ## 背景

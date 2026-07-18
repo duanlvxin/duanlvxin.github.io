@@ -5,7 +5,7 @@ tags:
  - js 模块 打包
 categories:
  - js
-bg_size: auto
+cover: https://pic3.zhimg.com/v2-43d3198abdc1915708e40c002697c815_1200x500.jpg
 ---
 
 ### 介绍
