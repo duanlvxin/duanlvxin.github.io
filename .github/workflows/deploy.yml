@@ -36,4 +36,4 @@ jobs:
         with:
           branch: master
           folder: public
-          ssh-key: ${{ secrets.HEXO_DEPLOY_KEY }}
+          # ssh-key: ${{ secrets.HEXO_DEPLOY_KEY }}
