@@ -5,6 +5,8 @@ categories:
   - js
 tags:
   - js
+cover: /img/cover/frontend.png
+top_img: /img/default-top.jpg
 ---
 
 ## 要点

@@ -7,6 +7,7 @@ categories:
  - typescript
 cover: /svg/typescript.svg
 bg_size: auto
+top_img: /img/default-top.jpg
 ---
 
 ## 编译器

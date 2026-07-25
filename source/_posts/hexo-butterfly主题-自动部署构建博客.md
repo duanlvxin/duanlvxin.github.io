@@ -5,6 +5,8 @@ tags:
   - hexo
 categories:
   - hexo
+cover: /img/cover/frontend.png
+top_img: /img/default-top.jpg
 ---
 
 # 使用hexo搭建博客

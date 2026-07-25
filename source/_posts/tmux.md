@@ -5,6 +5,8 @@ tags:
  - 开发者工具 终端
 categories:
  - 开发者工具
+cover: /img/cover/tool.png
+top_img: /img/default-top.jpg
 ---
 
 ## 详细文档

@@ -5,6 +5,8 @@ tags:
  - 开发者工具 终端 thefuck tldr
 categories:
  - 开发者工具
+cover: /img/cover/tool.png
+top_img: /img/default-top.jpg
 ---
 
 ## tldr

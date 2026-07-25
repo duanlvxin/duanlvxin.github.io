@@ -8,6 +8,7 @@ categories:
   - css
 cover: /img/css-secret.jpg
 mathjax: true
+top_img: /img/default-top.jpg
 ---
 
 ## 背景侵入边框问题

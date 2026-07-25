@@ -7,6 +7,7 @@ tags:
 categories:
   - css
 cover: /img/css-secret.jpg
+top_img: /img/default-top.jpg
 ---
 
 ## 选择适合的鼠标光标

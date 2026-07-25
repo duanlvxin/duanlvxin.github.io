@@ -7,6 +7,8 @@ tags:
   - html
   - js
   - 算法
+cover: /img/cover/frontend.png
+top_img: /img/default-top.jpg
 ---
 
 ## 背景

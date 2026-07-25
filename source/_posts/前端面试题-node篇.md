@@ -6,7 +6,8 @@ tags:
   - node
 categories:
   - 面试
-cover: /img/mianshi.jpg
+cover: /img/cover/job.png
+top_img: /img/default-top.jpg
 ---
 
 ## 如何理解node中模块的概念

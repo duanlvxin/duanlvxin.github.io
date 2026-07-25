@@ -7,6 +7,7 @@ tags:
 categories:
   - css
 cover: /img/css-secret.jpg
+top_img: /img/default-top.jpg
 ---
 <style>
   .example {

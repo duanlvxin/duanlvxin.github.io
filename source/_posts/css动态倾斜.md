@@ -5,6 +5,8 @@ tags:
   - css
 categories:
   - css
+cover: /img/cover/css-perspective.png
+top_img: /img/default-top.jpg
 ---
 
 

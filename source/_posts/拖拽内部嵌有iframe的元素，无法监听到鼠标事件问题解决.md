@@ -6,7 +6,8 @@ tags:
   事件
 categories:
   html
-cover: https://cn.bing.com/th?id=OHR.GreatCormorants_ZH-CN6811149253_1920x1080.jpg&rf=LaDigue_1920x1080.jpg
+cover: /img/cover/frontend.png
+top_img: /img/default-top.jpg
 ---
 
 ## 背景
